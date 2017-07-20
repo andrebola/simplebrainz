@@ -5,7 +5,7 @@ Introduction
 
 The idea behind this project is to build a simplified version of musicbrainz schema for different purposes. The final goal is to build a music knowledge base with the musicbrainz information.
 
-This problem has been already tacked in different projects, in this case we start with a different approach by creating some tables in the database that group some entities of musicbrainz. (See: https://wiki.musicbrainz.org/LinkedBrainz/NGS_to_RDF_mappings)
+This problem has been already tacked in different projects, in this case we start with a different approach by creating some tables in the database that group some entities of musicbrainz. (See: https://wiki.musicbrainz.org/LinkedBrainz)
 
 Steps
 -----
