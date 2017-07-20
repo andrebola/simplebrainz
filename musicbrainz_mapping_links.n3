@@ -1,0 +1,201 @@
+@prefix map: <file:/home/kurtjx/srcs/d2r-server-0.7/mapping.n3#> .
+@prefix mbz: <http://test.musicbrainz.org/> .
+@prefix vocab: <http://localhost:2020/vocab/resource/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix d2rq: <http://www.wiwiss.fu-berlin.de/suhl/bizer/D2RQ/0.1#> .
+@prefix d2r: <http://sites.wiwiss.fu-berlin.de/suhl/bizer/d2r-server/config.rdf#> .
+@prefix jdbc: <http://d2rq.org/terms/jdbc/> .
+# vocabs in mapping
+@prefix mo: <http://purl.org/ontology/mo/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix ov: <http://open.vocab.org/terms/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix event: <http://purl.org/NET/c4dm/event.owl#> .
+@prefix is: <http://purl.org/ontology/is/core#> .
+@prefix isi: <http://purl.org/ontology/is/inst/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix tl: <http://purl.org/NET/c4dm/timeline.owl#> .
+@prefix sb: <http://simplebrainz.org/ontology/> .
+
+# connection stuff
+map:database a d2rq:Database ;
+    d2rq:jdbcDriver "org.postgresql.Driver" ;
+    d2rq:jdbcDSN "jdbc:postgresql://localhost/musicbrainz" ;
+    d2rq:username "" ;
+    d2rq:password "" ;
+    # relatively crude to limit db load
+    #d2rq:resultSizeLimit "1000" .
+    # jdbc:socketTimeout "30" ;
+
+<> a d2r:Server ;
+    rdfs:label "LinkedBrainz" ;
+    #d2r:baseURI <http://localhost:2020/> ;
+    d2r:baseURI <http://simplebrainz.org/> ;
+    d2r:port 2020 ;
+    d2r:documentMetadata [
+        rdfs:comment "This is an RDF translation of the MusicBrainz service." ;
+    ] ;
+    d2r:vocabularyIncludeInstances true .
+
+################
+# artist table #
+################
+
+map:Artist a d2rq:ClassMap ;
+	d2rq:dataStorage map:database ;
+	d2rq:uriPattern "http://musicbrainz.org/artist/@@musicbrainz.artist.gid@@#_" ;
+	d2rq:class mo:MusicArtist ;
+	d2rq:classDefinitionLabel "Music Artist"@en .
+
+#map:musicbrainz_guid_artist a d2rq:PropertyBridge ;
+#	d2rq:belongsToClassMap map:Artist ;
+#	d2rq:property mo:musicbrainz_guid ;
+#	d2rq:column "musicbrainz.artist.gid" ;
+#	d2rq:datatype xsd:string .
+
+map:artist_name a d2rq:PropertyBridge ;
+	d2rq:belongsToClassMap map:Artist ;
+	d2rq:property rdfs:label;
+	d2rq:column "musicbrainz.artist.name" .
+
+map:artist_area a d2rq:PropertyBridge ;
+    d2rq:belongsToClassMap map:Artist ;
+    d2rq:property foaf:based_near ;
+    d2rq:refersToClassMap map:Area ;
+    d2rq:join "musicbrainz.artist.area => musicbrainz.area.id".
+
+
+########################################
+# release_group table (mo:SignalGroup) #
+########################################
+
+map:ReleaseGroup a d2rq:ClassMap ;
+    d2rq:dataStorage map:database ;
+    d2rq:uriPattern "http://musicbrainz.org/release_group/@@musicbrainz.release_group.gid@@#_" ;
+    d2rq:class mo:SignalGroup ;
+    d2rq:classDefinitionLabel "Signal Group"@en .
+
+#map:musicbrainz_guid_release_group a d2rq:PropertyBridge ;
+#	d2rq:belongsToClassMap map:ReleaseGroup ;
+#	d2rq:property mo:musicbrainz_guid ;
+#	d2rq:column "musicbrainz.release_group.gid" ;
+#	d2rq:datatype xsd:string ;
+#	.
+
+map:release_group_name a d2rq:PropertyBridge ;
+    d2rq:belongsToClassMap map:ReleaseGroup ;
+    d2rq:property rdfs:label;
+    d2rq:column "musicbrainz.release_group.name" ;
+    d2rq:datatype xsd:string .
+	
+map:release_group_credit a d2rq:PropertyBridge ;
+    d2rq:belongsToClassMap map:ReleaseGroup ;
+    d2rq:property foaf:maker ;
+    d2rq:refersToClassMap map:Artist ;
+    d2rq:join "musicbrainz.release_group.gid => release_group_artist.release_group" ;
+    d2rq:join "release_group_artist.artist => musicbrainz.artist.id" .
+
+
+########################################
+# recording_group table (mo:Signal) #
+########################################
+
+map:RecordingGroup a d2rq:ClassMap ;
+    d2rq:dataStorage map:database ;
+    d2rq:uriPattern "http://musicbrainz.org/recording_group/@@recording_group.recording_group@@#_" ;
+    d2rq:class mo:MusicalWork ;
+    d2rq:classDefinitionLabel "MusicalWork"@en .
+
+#map:musicbrainz_guid_recording_group a d2rq:PropertyBridge ;
+#	d2rq:belongsToClassMap map:RecordingGroup ;
+#	d2rq:property mo:musicbrainz_guid ;
+#	d2rq:column "recording_group.recording_group" ;
+#	d2rq:datatype xsd:string ;
+#	.
+
+map:recording_group_name a d2rq:PropertyBridge ;
+    d2rq:belongsToClassMap map:RecordingGroup ;
+    d2rq:property rdfs:label ;
+    d2rq:column "recording_group.name" ;
+    d2rq:datatype xsd:string .
+	
+map:recording_group_credit a d2rq:PropertyBridge ;
+    d2rq:belongsToClassMap map:RecordingGroup ;
+    d2rq:property foaf:maker ;
+    d2rq:refersToClassMap map:Artist ;
+    d2rq:join "recording_group.recording_group => recording_group_artist.recording_group" ;
+    d2rq:join "recording_group_artist.artist => musicbrainz.artist.id" .
+
+
+########################################
+# Place table  #
+########################################
+
+map:Place a d2rq:ClassMap ;
+    d2rq:dataStorage map:database ;
+    d2rq:uriPattern "http://musicbrainz.org/place/@@musicbrainz.place.id@@#_" ;
+    d2rq:class geo:SpatialThing ;
+    d2rq:classDefinitionLabel "SpatialThing"@en .
+
+map:place_name a d2rq:PropertyBridge ;
+    d2rq:belongsToClassMap map:Place ;
+    d2rq:property rdfs:label ;
+    d2rq:column "musicbrainz.place.name" ;
+    d2rq:datatype xsd:string .
+	
+map:place_area a d2rq:PropertyBridge ;
+    d2rq:belongsToClassMap map:Place ;
+    d2rq:property sb:sm_area ;
+    d2rq:refersToClassMap map:Area ;
+    d2rq:join "musicbrainz.place.area => musicbrainz.area.id".
+
+########################################
+# Area table  #
+########################################
+
+map:Area a d2rq:ClassMap ;
+    d2rq:dataStorage map:database ;
+    d2rq:uriPattern "http://musicbrainz.org/area/@@musicbrainz.area.id@@#_" ;
+    d2rq:class geo:SpatialThing ;
+    d2rq:classDefinitionLabel "SpatialThing"@en .
+
+map:area_name a d2rq:PropertyBridge ;
+    d2rq:belongsToClassMap map:Area ;
+    d2rq:property rdfs:label ;
+    d2rq:column "musicbrainz.area.name" ;
+    d2rq:datatype xsd:string .
+
+########################################
+# Label table  #
+########################################
+
+map:Label a d2rq:ClassMap ;
+    d2rq:dataStorage map:database ;
+    d2rq:uriPattern "http://musicbrainz.org/label/@@musicbrainz.label.id@@#_" ;
+    d2rq:class mo:Label ;
+    d2rq:classDefinitionLabel "Label"@en .
+
+map:label_name a d2rq:PropertyBridge ;
+    d2rq:belongsToClassMap map:Label ;
+    d2rq:property rdfs:label ;
+    d2rq:column "musicbrainz.label.name" ;
+    d2rq:datatype xsd:string .
+
+map:label_area a d2rq:PropertyBridge ;
+    d2rq:belongsToClassMap map:Label ;
+    d2rq:property foaf:based_near ;
+    d2rq:refersToClassMap map:Area ;
+    d2rq:join "musicbrainz.label.area => musicbrainz.area.id".
+
+
+########################################
+# links table #
+########################################
+
+
