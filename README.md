@@ -10,7 +10,9 @@ This problem has been already tacked in different projects, in this case we star
 Steps
 -----
 
-To reproduce this task the initial step is to download the musicbrainz dump from here: https://musicbrainz.org/doc/MusicBrainz_Database/Download, then you should run the script create_tables.py which will take about 24 hours. 
+To reproduce this task the initial step is to download the musicbrainz dump from here: http://ftp.musicbrainz.org/pub/musicbrainz/data/fullexport/ and then create a database with the data following the project: https://github.com/lalinsky/mbslave 
+
+Then you should run the script 'create_tables.py' which will create the new tables which are a simplified version of the musicbrainz schema. This script will take about 24 hours. 
 
 The next step is to create a dump in RDF of all the data, for that you could use our mappings to RDF or create your own, we provide the scripts we used to generate the mapping files (full_mapping_simplebrainz.n3)
 
