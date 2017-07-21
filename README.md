@@ -12,7 +12,7 @@ Steps
 
 To reproduce this task the initial step is to download the musicbrainz dump from here: http://ftp.musicbrainz.org/pub/musicbrainz/data/fullexport/ and then create a database with the data following the project: https://github.com/lalinsky/mbslave 
 
-Then you should run the script 'create_tables.py' which will create the new tables which are a simplified version of the musicbrainz schema. This script will take about 24 hours. 
+Then you should run the script 'create_tables.py' which will create the new tables and fill with the data od musicbrainz. This script will take about 24 hours. At this point you will have a simplified version of the musicbrainz schema.
 
 The next step is to create a dump in RDF of all the data, for that you could use our mappings to RDF or create your own, we provide the scripts we used to generate the mapping files (full_mapping_simplebrainz.n3)
 
