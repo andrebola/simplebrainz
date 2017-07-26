@@ -24,7 +24,7 @@ def main():
             ("rel_area_area", "Area", "Area", "musicbrainz.area.id", "area_id", "area_id2", "musicbrainz.area.id"),
             ("rel_place_recording_group", "Place", "RecordingGroup", "musicbrainz.place.id", "place_id", "recording_group",  "recording_group.recording_group"),
             ("rel_place_release_group", "Place", "ReleaseGroup", "musicbrainz.place.id", "place_id", "release_group", "musicbrainz.release_group.gid"),
-            ("rel_place_place", "Place", "RecordingGroup", "musicbrainz.place.id", "place_id","place_id2",  "musicbrainz.place.id"),
+            ("rel_place_place", "Place", "Place", "musicbrainz.place.id", "place_id","place_id2",  "musicbrainz.place.id"),
             ("rel_label_label", "Label", "Label", "musicbrainz.label.id", "label_id", "label_id2", "musicbrainz.label.id"),
             ("rel_label_recording_group","Label", "RecordingGroup", "musicbrainz.label.id", "label_id", "recording_group",  "recording_group.recording_group"),
             ("rel_label_release_group", "Label", "ReleaseGroup", "musicbrainz.label.id", "label_id", "release_group", "musicbrainz.release_group.gid"),
@@ -32,7 +32,7 @@ def main():
              ]
 
 
-
+    alias_counter = 0
     output = []
     for table, c1, c2, t1, co1, co2, t2 in tables:
         cur.execute("select link_label, link_type from %s group by link_label, link_type ;" % (table))
@@ -46,9 +46,10 @@ def main():
                     d2rq:property sb:%s ;
                     d2rq:refersToClassMap map:%s ;
                     d2rq:condition "%s.link_type =%i " ;
-                    d2rq:alias "%s as rg1";
+                    d2rq:alias "%s as rg%d";
                     d2rq:join "%s=> %s.%s" ;
-                    d2rq:join "%s.%s => rg1.%s" .\n\n""" % (table, short_name, c1, short_name, c2, table, links[1], same_table_name, t1, table, co1, table, co2, same_table_field))
+                    d2rq:join "%s.%s => rg%d.%s" .\n\n""" % (table, short_name, c1, short_name, c2, table, links[1], same_table_name, alias_counter, t1, table, co1, table, co2, alias_counter, same_table_field))
+                alias_counter +=1
             else:
                 output.append("""map:%s_%s a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:%s ;

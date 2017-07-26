@@ -123,68 +123,68 @@ def save_results(conn, cur):
     ##--------##
 
     # create tables
-    cur.execute("CREATE TABLE IF NOT EXISTS rel_artist_recording_group(artist_id INTEGER, recording_group UUID, link_type INTEGER, link_label VARCHAR);")
-    cur.execute("CREATE TABLE IF NOT EXISTS rel_artist_release_group(artist_id INTEGER, release_group UUID, link_type INTEGER, link_label VARCHAR);")
-    cur.execute("CREATE TABLE IF NOT EXISTS rel_artist_place(artist_id INTEGER, place_id INTEGER, link_type INTEGER, link_label VARCHAR);")
-    cur.execute("CREATE TABLE IF NOT EXISTS rel_recording_group_recording_group(recording_group UUID, recording_group2 UUID, link_type INTEGER, link_label VARCHAR);")
-    cur.execute("CREATE TABLE IF NOT EXISTS rel_release_group_release_group(release_group UUID, release_group2 UUID, link_type INTEGER, link_label VARCHAR);")
-    cur.execute("CREATE TABLE IF NOT EXISTS rel_artist_artist(artist INTEGER, artist2 INTEGER, link_type INTEGER, link_label VARCHAR);")
-    cur.execute("CREATE TABLE IF NOT EXISTS rel_area_recording_group(area_id INTEGER, recording_group UUID, link_type INTEGER, link_label VARCHAR);")
-    cur.execute("CREATE TABLE IF NOT EXISTS rel_area_release_group(area_id INTEGER, release_group UUID, link_type INTEGER, link_label VARCHAR);")
-    cur.execute("CREATE TABLE IF NOT EXISTS rel_area_area(area_id INTEGER, area_id2 INTEGER, link_type INTEGER, link_label VARCHAR);")
-    cur.execute("CREATE TABLE IF NOT EXISTS rel_place_recording_group(place_id INTEGER, recording_group UUID, link_type INTEGER, link_label VARCHAR);")
-    cur.execute("CREATE TABLE IF NOT EXISTS rel_place_release_group(place_id INTEGER, release_group UUID, link_type INTEGER, link_label VARCHAR);")
-    cur.execute("CREATE TABLE IF NOT EXISTS rel_place_place(place_id INTEGER, place_id2 INTEGER, link_type INTEGER, link_label VARCHAR);")
-    cur.execute("CREATE TABLE IF NOT EXISTS rel_label_label(label_id INTEGER, label_id2 INTEGER, link_type INTEGER, link_label VARCHAR);")
-    cur.execute("CREATE TABLE IF NOT EXISTS rel_label_recording_group(label_id INTEGER, recording_group UUID, link_type INTEGER, link_label VARCHAR);")
-    cur.execute("CREATE TABLE IF NOT EXISTS rel_label_release_group(label_id INTEGER, release_group UUID, link_type INTEGER, link_label VARCHAR);")
-    cur.execute("CREATE TABLE IF NOT EXISTS rel_artist_label(artist_id INTEGER, label_id INTEGER, link_type INTEGER, link_label VARCHAR);")
+    cur.execute("CREATE TABLE IF NOT EXISTS rel_artist_recording_group(artist_id INTEGER, recording_group UUID, link_type INTEGER, link_label VARCHAR, CONSTRAINT rel_a_rg_pk PRIMARY KEY (artist_id, recording_group, link_type));")
+    cur.execute("CREATE TABLE IF NOT EXISTS rel_artist_release_group(artist_id INTEGER, release_group UUID, link_type INTEGER, link_label VARCHAR, CONSTRAINT rel_a_rlg_pk PRIMARY KEY (artist_id, release_group, link_type));")    
+    cur.execute("CREATE TABLE IF NOT EXISTS rel_artist_place(artist_id INTEGER, place_id INTEGER, link_type INTEGER, link_label VARCHAR, CONSTRAINT rel_a_p_pk PRIMARY KEY (artist_id, place_id, link_type));")    
+    cur.execute("CREATE TABLE IF NOT EXISTS rel_recording_group_recording_group(recording_group UUID, recording_group2 UUID, link_type INTEGER, link_label VARCHAR, CONSTRAINT rel_rc_rc_pk PRIMARY KEY (recording_group, recording_group2, link_type));")    
+    cur.execute("CREATE TABLE IF NOT EXISTS rel_release_group_release_group(release_group UUID, release_group2 UUID, link_type INTEGER, link_label VARCHAR, CONSTRAINT rel_rg_rg_pk PRIMARY KEY (release_group, release_group2, link_type));")    
+    cur.execute("CREATE TABLE IF NOT EXISTS rel_artist_artist(artist INTEGER, artist2 INTEGER, link_type INTEGER, link_label VARCHAR, CONSTRAINT rel_a_a_pk PRIMARY KEY (artist, artist2, link_type));")    
+    cur.execute("CREATE TABLE IF NOT EXISTS rel_area_recording_group(area_id INTEGER, recording_group UUID, link_type INTEGER, link_label VARCHAR, CONSTRAINT rel_ar_rg_pk PRIMARY KEY (area_id, recording_group, link_type));")
+    cur.execute("CREATE TABLE IF NOT EXISTS rel_area_release_group(area_id INTEGER, release_group UUID, link_type INTEGER, link_label VARCHAR, CONSTRAINT rel_ar_rlg_pk PRIMARY KEY (area_id, release_group, link_type));")
+    cur.execute("CREATE TABLE IF NOT EXISTS rel_area_area(area_id INTEGER, area_id2 INTEGER, link_type INTEGER, link_label VARCHAR, CONSTRAINT rel_ar_ar_pk PRIMARY KEY (area_id, area_id2, link_type));")
+    cur.execute("CREATE TABLE IF NOT EXISTS rel_place_recording_group(place_id INTEGER, recording_group UUID, link_type INTEGER, link_label VARCHAR, CONSTRAINT rel_p_rg_pk PRIMARY KEY (place_id, recording_group, link_type));")
+    cur.execute("CREATE TABLE IF NOT EXISTS rel_place_release_group(place_id INTEGER, release_group UUID, link_type INTEGER, link_label VARCHAR, CONSTRAINT rel_p_rlg_pk PRIMARY KEY (place_id, release_group, link_type));")
+    cur.execute("CREATE TABLE IF NOT EXISTS rel_place_place(place_id INTEGER, place_id2 INTEGER, link_type INTEGER, link_label VARCHAR, CONSTRAINT rel_p_p_pk PRIMARY KEY (place_id, place_id2, link_type));")
+    cur.execute("CREATE TABLE IF NOT EXISTS rel_label_label(label_id INTEGER, label_id2 INTEGER, link_type INTEGER, link_label VARCHAR, CONSTRAINT rel_l_l_pk PRIMARY KEY (label_id, label_id2, link_type));")
+    cur.execute("CREATE TABLE IF NOT EXISTS rel_label_recording_group(label_id INTEGER, recording_group UUID, link_type INTEGER, link_label VARCHAR, CONSTRAINT rel_l_l_pk PRIMARY KEY (label_id, recording_group, link_type));")
+    cur.execute("CREATE TABLE IF NOT EXISTS rel_label_release_group(label_id INTEGER, release_group UUID, link_type INTEGER, link_label VARCHAR, CONSTRAINT rel_l_rlg_pk PRIMARY KEY (label_id, release_group, link_type));")
+    cur.execute("CREATE TABLE IF NOT EXISTS rel_artist_label(artist_id INTEGER, label_id INTEGER, link_type INTEGER, link_label VARCHAR, CONSTRAINT rel_a_l_pk PRIMARY KEY (artist_id, label_id, link_type));")
 
-    cur.execute("INSERT INTO rel_artist_recording_group (select lar.entity0, rgr.recording_group, l.link_type, lt.name from musicbrainz.l_artist_recording lar, musicbrainz.link l, musicbrainz.link_type lt, recording_group_recording rgr WHERE lar.link = l.id AND l.link_type = lt.id AND lar.entity1 = rgr.recording_id);")
-
-    cur.execute("INSERT INTO rel_artist_recording_group (select law.entity0, rgr.recording_group, l.link_type, lt.name from musicbrainz.l_artist_work law, musicbrainz.link l, musicbrainz.link_type lt, recording_group_recording rgr WHERE law.link = l.id AND l.link_type = lt.id AND law.entity1 = rgr.work_id);")
-
-    cur.execute("INSERT INTO rel_artist_release_group (select lar.entity0, rg.gid, l.link_type, lt.name from musicbrainz.l_artist_release_group lar, musicbrainz.link l, musicbrainz.link_type lt, musicbrainz.release_group rg WHERE lar.link = l.id AND l.link_type = lt.id AND lar.entity1 = rg.id);")
-
-    cur.execute("INSERT INTO rel_artist_release_group (select lar.entity0, rg.gid, l.link_type, lt.name from musicbrainz.l_artist_release lar, musicbrainz.link l, musicbrainz.link_type lt, musicbrainz.release r, musicbrainz.release_group rg WHERE lar.link = l.id AND l.link_type = lt.id AND lar.entity1 = r.id AND r.release_group = rg.id);")
-
-
-    cur.execute("INSERT INTO rel_recording_group_recording_group (select rgr.recording_group, rgr2.recording_group, l.link_type, lt.name from musicbrainz.l_recording_recording lrr, musicbrainz.link l, musicbrainz.link_type lt, recording_group_recording rgr, recording_group_recording rgr2 WHERE lrr.link = l.id AND l.link_type = lt.id AND lrr.entity1 = rgr.recording_id AND lrr.entity0 = rgr2.recording_id AND rgr.recording_group <> rgr2.recording_group  );")
-
-    cur.execute("INSERT INTO rel_recording_group_recording_group (select rgr.recording_group, rgr2.recording_group, l.link_type, lt.name from musicbrainz.l_work_work lrr, musicbrainz.link l, musicbrainz.link_type lt, recording_group_recording rgr, recording_group_recording rgr2 WHERE lrr.link = l.id AND l.link_type = lt.id AND lrr.entity1 = rgr.work_id AND lrr.entity0 = rgr2.recording_id AND rgr.recording_group <> rgr2.recording_group  );")
-
-    cur.execute("INSERT INTO rel_release_group_release_group (select rg.gid, rg2.gid, l.link_type, lt.name from musicbrainz.l_release_release lrr, musicbrainz.link l, musicbrainz.link_type lt, musicbrainz.release r, musicbrainz.release r2, musicbrainz.release_group rg, musicbrainz.release_group rg2 WHERE lrr.link = l.id AND l.link_type = lt.id AND lrr.entity1 = r.id AND lrr.entity0 = r2.id AND r.release_group = rg.id AND  r2.release_group = rg2.id AND r.release_group <> r2.release_group  );")
+    cur.execute("INSERT INTO rel_artist_recording_group (select lar.entity0, rgr.recording_group, l.link_type, lt.name from musicbrainz.l_artist_recording lar, musicbrainz.link l, musicbrainz.link_type lt, recording_group_recording rgr WHERE lar.link = l.id AND l.link_type = lt.id AND lar.entity1 = rgr.recording_id)  ON CONFLICT DO NOTHING;")
+    
+    cur.execute("INSERT INTO rel_artist_recording_group (select law.entity0, rgr.recording_group, l.link_type, lt.name from musicbrainz.l_artist_work law, musicbrainz.link l, musicbrainz.link_type lt, recording_group_recording rgr WHERE law.link = l.id AND l.link_type = lt.id AND law.entity1 = rgr.work_id)  ON CONFLICT DO NOTHING;")
+    
+    cur.execute("INSERT INTO rel_artist_release_group (select lar.entity0, rg.gid, l.link_type, lt.name from musicbrainz.l_artist_release_group lar, musicbrainz.link l, musicbrainz.link_type lt, musicbrainz.release_group rg WHERE lar.link = l.id AND l.link_type = lt.id AND lar.entity1 = rg.id)  ON CONFLICT DO NOTHING;")
+    
+    cur.execute("INSERT INTO rel_artist_release_group (select lar.entity0, rg.gid, l.link_type, lt.name from musicbrainz.l_artist_release lar, musicbrainz.link l, musicbrainz.link_type lt, musicbrainz.release r, musicbrainz.release_group rg WHERE lar.link = l.id AND l.link_type = lt.id AND lar.entity1 = r.id AND r.release_group = rg.id)  ON CONFLICT DO NOTHING;")
 
 
-    cur.execute("INSERT INTO rel_artist_artist (select laa.entity0, laa.entity1, l.link_type, lt.name from musicbrainz.l_artist_artist laa, musicbrainz.link l, musicbrainz.link_type lt WHERE laa.link = l.id AND l.link_type = lt.id );")
+    cur.execute("INSERT INTO rel_recording_group_recording_group (select rgr.recording_group, rgr2.recording_group, l.link_type, lt.name from musicbrainz.l_recording_recording lrr, musicbrainz.link l, musicbrainz.link_type lt, recording_group_recording rgr, recording_group_recording rgr2 WHERE lrr.link = l.id AND l.link_type = lt.id AND lrr.entity1 = rgr.recording_id AND lrr.entity0 = rgr2.recording_id AND rgr.recording_group <> rgr2.recording_group  )  ON CONFLICT DO NOTHING;")   
+    
+    cur.execute("INSERT INTO rel_recording_group_recording_group (select rgr.recording_group, rgr2.recording_group, l.link_type, lt.name from musicbrainz.l_work_work lrr, musicbrainz.link l, musicbrainz.link_type lt, recording_group_recording rgr, recording_group_recording rgr2 WHERE lrr.link = l.id AND l.link_type = lt.id AND lrr.entity1 = rgr.work_id AND lrr.entity0 = rgr2.recording_id AND rgr.recording_group <> rgr2.recording_group  ) ON CONFLICT DO NOTHING;")  
+    
+    cur.execute("INSERT INTO rel_release_group_release_group (select rg.gid, rg2.gid, l.link_type, lt.name from musicbrainz.l_release_release lrr, musicbrainz.link l, musicbrainz.link_type lt, musicbrainz.release r, musicbrainz.release r2, musicbrainz.release_group rg, musicbrainz.release_group rg2 WHERE lrr.link = l.id AND l.link_type = lt.id AND lrr.entity1 = r.id AND lrr.entity0 = r2.id AND r.release_group = rg.id AND  r2.release_group = rg2.id AND r.release_group <> r2.release_group  ) ON CONFLICT DO NOTHING;")  
 
-    cur.execute("INSERT INTO rel_area_recording_group (select lar.entity0, rgr.recording_group, l.link_type, lt.name from musicbrainz.l_area_recording lar, musicbrainz.link l, musicbrainz.link_type lt, recording_group_recording rgr WHERE lar.link = l.id AND l.link_type = lt.id AND lar.entity1 = rgr.recording_id);")
 
-    cur.execute("INSERT INTO rel_area_recording_group (select law.entity0, rgr.recording_group, l.link_type, lt.name from musicbrainz.l_area_work law, musicbrainz.link l, musicbrainz.link_type lt, recording_group_recording rgr WHERE law.link = l.id AND l.link_type = lt.id AND law.entity1 = rgr.work_id);")
+    cur.execute("INSERT INTO rel_artist_artist (select laa.entity0, laa.entity1, l.link_type, lt.name from musicbrainz.l_artist_artist laa, musicbrainz.link l, musicbrainz.link_type lt WHERE laa.link = l.id AND l.link_type = lt.id )  ON CONFLICT DO NOTHING;")    
+    
+    cur.execute("INSERT INTO rel_area_recording_group (select lar.entity0, rgr.recording_group, l.link_type, lt.name from musicbrainz.l_area_recording lar, musicbrainz.link l, musicbrainz.link_type lt, recording_group_recording rgr WHERE lar.link = l.id AND l.link_type = lt.id AND lar.entity1 = rgr.recording_id)  ON CONFLICT DO NOTHING;")   
+    
+    cur.execute("INSERT INTO rel_area_recording_group (select law.entity0, rgr.recording_group, l.link_type, lt.name from musicbrainz.l_area_work law, musicbrainz.link l, musicbrainz.link_type lt, recording_group_recording rgr WHERE law.link = l.id AND l.link_type = lt.id AND law.entity1 = rgr.work_id)  ON CONFLICT DO NOTHING;")  
+    
+    cur.execute("INSERT INTO rel_area_release_group (select lar.entity0, rg.gid, l.link_type, lt.name from musicbrainz.l_area_release lar, musicbrainz.link l, musicbrainz.link_type lt, musicbrainz.release_group rg WHERE lar.link = l.id AND l.link_type = lt.id AND lar.entity1 = rg.id)  ON CONFLICT DO NOTHING;")
+    
+    cur.execute("INSERT INTO rel_area_area (select laa.entity0, laa.entity1, l.link_type, lt.name from musicbrainz.l_area_area laa, musicbrainz.link l, musicbrainz.link_type lt WHERE laa.link = l.id AND l.link_type = lt.id );") 
+    
+    cur.execute("INSERT INTO rel_place_recording_group (select law.entity0, rgr.recording_group, l.link_type, lt.name from musicbrainz.l_place_recording law, musicbrainz.link l, musicbrainz.link_type lt, recording_group_recording rgr WHERE law.link = l.id AND l.link_type = lt.id AND law.entity1 = rgr.recording_id) ON CONFLICT DO NOTHING;")
+    
+     cur.execute("INSERT INTO rel_place_recording_group (select law.entity0, rgr.recording_group, l.link_type, lt.name from musicbrainz.l_place_work law, musicbrainz.link l, musicbrainz.link_type lt, recording_group_recording rgr WHERE law.link = l.id AND l.link_type = lt.id AND law.entity1 = rgr.work_id) ON CONFLICT DO NOTHING;")
+    
+    cur.execute("INSERT INTO rel_place_release_group (select lar.entity0, rg.gid, l.link_type, lt.name from musicbrainz.l_place_release lar, musicbrainz.link l, musicbrainz.link_type lt, musicbrainz.release r, musicbrainz.release_group rg WHERE lar.link = l.id AND l.link_type = lt.id AND lar.entity1 = r.id AND r.release_group = rg.id) ON CONFLICT DO NOTHING;")
+    
+    cur.execute("INSERT INTO rel_artist_place (select laa.entity0, laa.entity1, l.link_type, lt.name from musicbrainz.l_artist_place laa, musicbrainz.link l, musicbrainz.link_type lt WHERE laa.link = l.id AND l.link_type = lt.id ) ON CONFLICT DO NOTHING;") 
 
-    cur.execute("INSERT INTO rel_area_release_group (select lar.entity0, rg.gid, l.link_type, lt.name from musicbrainz.l_area_release lar, musicbrainz.link l, musicbrainz.link_type lt, musicbrainz.release_group rg WHERE lar.link = l.id AND l.link_type = lt.id AND lar.entity1 = rg.id);")
-
-    cur.execute("INSERT INTO rel_area_area (select laa.entity0, laa.entity1, l.link_type, lt.name from musicbrainz.l_area_area laa, musicbrainz.link l, musicbrainz.link_type lt WHERE laa.link = l.id AND l.link_type = lt.id );")
-
-    cur.execute("INSERT INTO rel_place_recording_group (select law.entity0, rgr.recording_group, l.link_type, lt.name from musicbrainz.l_place_recording law, musicbrainz.link l, musicbrainz.link_type lt, recording_group_recording rgr WHERE law.link = l.id AND l.link_type = lt.id AND law.entity1 = rgr.recording_id);")
-
-     cur.execute("INSERT INTO rel_place_recording_group (select law.entity0, rgr.recording_group, l.link_type, lt.name from musicbrainz.l_place_work law, musicbrainz.link l, musicbrainz.link_type lt, recording_group_recording rgr WHERE law.link = l.id AND l.link_type = lt.id AND law.entity1 = rgr.work_id);")
-
-    cur.execute("INSERT INTO rel_place_release_group (select lar.entity0, rg.gid, l.link_type, lt.name from musicbrainz.l_place_release lar, musicbrainz.link l, musicbrainz.link_type lt, musicbrainz.release r, musicbrainz.release_group rg WHERE lar.link = l.id AND l.link_type = lt.id AND lar.entity1 = r.id AND r.release_group = rg.id);")
-
-    cur.execute("INSERT INTO rel_artist_place (select laa.entity0, laa.entity1, l.link_type, lt.name from musicbrainz.l_artist_place laa, musicbrainz.link l, musicbrainz.link_type lt WHERE laa.link = l.id AND l.link_type = lt.id );")
-
-    cur.execute("INSERT INTO rel_place_place (select laa.entity0, laa.entity1, l.link_type, lt.name from musicbrainz.l_place_place laa, musicbrainz.link l, musicbrainz.link_type lt WHERE laa.link = l.id AND l.link_type = lt.id );")
-
-    cur.execute("INSERT INTO rel_label_label (select laa.entity0, laa.entity1, l.link_type, lt.name from musicbrainz.l_label_label laa, musicbrainz.link l, musicbrainz.link_type lt WHERE laa.link = l.id AND l.link_type = lt.id );")
-
-    cur.execute("INSERT INTO rel_label_recording_group (select law.entity0, rgr.recording_group, l.link_type, lt.name from musicbrainz.l_label_recording law, musicbrainz.link l, musicbrainz.link_type lt, recording_group_recording rgr WHERE law.link = l.id AND l.link_type = lt.id AND law.entity1 = rgr.recording_id);")
-    cur.execute("INSERT INTO rel_label_recording_group (select law.entity0, rgr.recording_group, l.link_type, lt.name from musicbrainz.l_label_work law, musicbrainz.link l, musicbrainz.link_type lt, recording_group_recording rgr WHERE law.link = l.id AND l.link_type = lt.id AND law.entity1 = rgr.work_id);")
-
-    cur.execute("INSERT INTO rel_label_release_group (select lar.entity0, rg.gid, l.link_type, lt.name from musicbrainz.l_label_release lar, musicbrainz.link l, musicbrainz.link_type lt, musicbrainz.release r, musicbrainz.release_group rg WHERE lar.link = l.id AND l.link_type = lt.id AND lar.entity1 = r.id AND r.release_group = rg.id);")
-
-    cur.execute("INSERT INTO rel_artist_label (select laa.entity0, laa.entity1, l.link_type, lt.name from musicbrainz.l_artist_label laa, musicbrainz.link l, musicbrainz.link_type lt WHERE laa.link = l.id AND l.link_type = lt.id );")
-
+    cur.execute("INSERT INTO rel_place_place (select laa.entity0, laa.entity1, l.link_type, lt.name from musicbrainz.l_place_place laa, musicbrainz.link l, musicbrainz.link_type lt WHERE laa.link = l.id AND l.link_type = lt.id ) ON CONFLICT DO NOTHING;")  
+    
+    cur.execute("INSERT INTO rel_label_label (select laa.entity0, laa.entity1, l.link_type, lt.name from musicbrainz.l_label_label laa, musicbrainz.link l, musicbrainz.link_type lt WHERE laa.link = l.id AND l.link_type = lt.id ) ON CONFLICT DO NOTHING;")  
+    
+    cur.execute("INSERT INTO rel_label_recording_group (select law.entity0, rgr.recording_group, l.link_type, lt.name from musicbrainz.l_label_recording law, musicbrainz.link l, musicbrainz.link_type lt, recording_group_recording rgr WHERE law.link = l.id AND l.link_type = lt.id AND law.entity1 = rgr.recording_id) ON CONFLICT DO NOTHING;")
+    cur.execute("INSERT INTO rel_label_recording_group (select law.entity0, rgr.recording_group, l.link_type, lt.name from musicbrainz.l_label_work law, musicbrainz.link l, musicbrainz.link_type lt, recording_group_recording rgr WHERE law.link = l.id AND l.link_type = lt.id AND law.entity1 = rgr.work_id) ON CONFLICT DO NOTHING;")
+    
+    cur.execute("INSERT INTO rel_label_release_group (select lar.entity0, rg.gid, l.link_type, lt.name from musicbrainz.l_label_release lar, musicbrainz.link l, musicbrainz.link_type lt, musicbrainz.release r, musicbrainz.release_group rg WHERE lar.link = l.id AND l.link_type = lt.id AND lar.entity1 = r.id AND r.release_group = rg.id) ON CONFLICT DO NOTHING;")
+    
+    cur.execute("INSERT INTO rel_artist_label (select laa.entity0, laa.entity1, l.link_type, lt.name from musicbrainz.l_artist_label laa, musicbrainz.link l, musicbrainz.link_type lt WHERE laa.link = l.id AND l.link_type = lt.id ) ON CONFLICT DO NOTHING;") 
+    
     conn.commit()
 
 def main():
