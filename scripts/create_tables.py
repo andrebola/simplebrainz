@@ -168,7 +168,7 @@ def save_results(conn, cur):
     
     cur.execute("INSERT INTO rel_place_recording_group (select law.entity0, rgr.recording_group, l.link_type, lt.name from musicbrainz.l_place_recording law, musicbrainz.link l, musicbrainz.link_type lt, recording_group_recording rgr WHERE law.link = l.id AND l.link_type = lt.id AND law.entity1 = rgr.recording_id) ON CONFLICT DO NOTHING;")
     
-     cur.execute("INSERT INTO rel_place_recording_group (select law.entity0, rgr.recording_group, l.link_type, lt.name from musicbrainz.l_place_work law, musicbrainz.link l, musicbrainz.link_type lt, recording_group_recording rgr WHERE law.link = l.id AND l.link_type = lt.id AND law.entity1 = rgr.work_id) ON CONFLICT DO NOTHING;")
+    cur.execute("INSERT INTO rel_place_recording_group (select law.entity0, rgr.recording_group, l.link_type, lt.name from musicbrainz.l_place_work law, musicbrainz.link l, musicbrainz.link_type lt, recording_group_recording rgr WHERE law.link = l.id AND l.link_type = lt.id AND law.entity1 = rgr.work_id) ON CONFLICT DO NOTHING;")
     
     cur.execute("INSERT INTO rel_place_release_group (select lar.entity0, rg.gid, l.link_type, lt.name from musicbrainz.l_place_release lar, musicbrainz.link l, musicbrainz.link_type lt, musicbrainz.release r, musicbrainz.release_group rg WHERE lar.link = l.id AND l.link_type = lt.id AND lar.entity1 = r.id AND r.release_group = rg.id) ON CONFLICT DO NOTHING;")
     
