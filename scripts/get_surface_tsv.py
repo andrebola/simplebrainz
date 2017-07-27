@@ -44,12 +44,12 @@ def load_types():
 
     cur = conn.cursor(name='artists')
     cur.itersize = 10000
-    cur.execute("select r.recording_group, array_agg(ra.name), array_agg(re.name) from musicbrainz.recording_alias ra, recording_group_recording r, musicbrainz.recording re where r.recording_id=ra.recording group by r.recording_group;")
+    cur.execute("select r.recording_group, array_agg(ra.name), array_agg(DISTINCT(re.name)) from musicbrainz.recording_alias ra, recording_group_recording r, musicbrainz.recording re where r.recording_id=ra.recording AND r.recording_id = re.id group by r.recording_group;")
     more_results = True
     while more_results:
         record = cur.fetchmany(cur.itersize)
         if record:
-            for alias in cur.fetchall():
+            for alias in record:
                 tsv_surface.write('http://musicbrainz.org/recording_group/' + alias[0] + '\t' + '\t'.join(alias[1]) + '\t'.join(alias[2]) + '\n')
         else:
             more_results = False
@@ -63,7 +63,7 @@ def load_types():
     while more_results:
         record = cur.fetchmany(cur.itersize)
         if record:
-            for alias in cur.fetchall():
+            for alias in record:
                 tsv_surface.write('http://musicbrainz.org/release_group/' + alias[1] + '\t' + '\t'.join(alias[2]) + '\t' + alias[3] + '\n')
         else:
             more_results = False
