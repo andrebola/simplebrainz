@@ -49,7 +49,7 @@ map:database a d2rq:Database ;
 
 map:Artist a d2rq:ClassMap ;
 	d2rq:dataStorage map:database ;
-	d2rq:uriPattern "http://musicbrainz.org/artist/@@musicbrainz.artist.gid@@#_" ;
+	d2rq:uriPattern "http://musicbrainz.org/artist/@@musicbrainz.artist.gid@@" ;
 	d2rq:class mo:MusicArtist ;
 	d2rq:classDefinitionLabel "Music Artist"@en .
 
@@ -77,7 +77,7 @@ map:artist_area a d2rq:PropertyBridge ;
 
 map:ReleaseGroup a d2rq:ClassMap ;
     d2rq:dataStorage map:database ;
-    d2rq:uriPattern "http://musicbrainz.org/release_group/@@musicbrainz.release_group.gid@@#_" ;
+    d2rq:uriPattern "http://musicbrainz.org/release_group/@@musicbrainz.release_group.gid@@" ;
     d2rq:class mo:SignalGroup ;
     d2rq:classDefinitionLabel "Signal Group"@en .
 
@@ -108,7 +108,7 @@ map:release_group_credit a d2rq:PropertyBridge ;
 
 map:RecordingGroup a d2rq:ClassMap ;
     d2rq:dataStorage map:database ;
-    d2rq:uriPattern "http://musicbrainz.org/recording_group/@@recording_group.recording_group@@#_" ;
+    d2rq:uriPattern "http://musicbrainz.org/recording_group/@@recording_group.recording_group@@" ;
     d2rq:class mo:MusicalWork ;
     d2rq:classDefinitionLabel "MusicalWork"@en .
 
@@ -139,7 +139,7 @@ map:recording_group_credit a d2rq:PropertyBridge ;
 
 map:Place a d2rq:ClassMap ;
     d2rq:dataStorage map:database ;
-    d2rq:uriPattern "http://musicbrainz.org/place/@@musicbrainz.place.id@@#_" ;
+    d2rq:uriPattern "http://musicbrainz.org/place/@@musicbrainz.place.id@@" ;
     d2rq:class geo:SpatialThing ;
     d2rq:classDefinitionLabel "SpatialThing"@en .
 
@@ -161,7 +161,7 @@ map:place_area a d2rq:PropertyBridge ;
 
 map:Area a d2rq:ClassMap ;
     d2rq:dataStorage map:database ;
-    d2rq:uriPattern "http://musicbrainz.org/area/@@musicbrainz.area.id@@#_" ;
+    d2rq:uriPattern "http://musicbrainz.org/area/@@musicbrainz.area.id@@" ;
     d2rq:class geo:SpatialThing ;
     d2rq:classDefinitionLabel "SpatialThing"@en .
 
@@ -177,7 +177,7 @@ map:area_name a d2rq:PropertyBridge ;
 
 map:Label a d2rq:ClassMap ;
     d2rq:dataStorage map:database ;
-    d2rq:uriPattern "http://musicbrainz.org/label/@@musicbrainz.label.id@@#_" ;
+    d2rq:uriPattern "http://musicbrainz.org/label/@@musicbrainz.label.id@@" ;
     d2rq:class mo:Label ;
     d2rq:classDefinitionLabel "Label"@en .
 
@@ -1149,9 +1149,9 @@ map:rel_recording_group_recording_group_music_video a d2rq:PropertyBridge ;
                     d2rq:property sb:music_video ;
                     d2rq:refersToClassMap map:RecordingGroup ;
                     d2rq:condition "rel_recording_group_recording_group.link_type =857 " ;
-                    d2rq:alias "recording_group as rg1";
+                    d2rq:alias "recording_group as rg0";
                     d2rq:join "recording_group.recording_group=> rel_recording_group_recording_group.recording_group" ;
-                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg1.recording_group" .
+                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg0.recording_group" .
 
 
 map:rel_recording_group_recording_group_DJ-mix a d2rq:PropertyBridge ;
@@ -1169,9 +1169,9 @@ map:rel_recording_group_recording_group_revision_of a d2rq:PropertyBridge ;
                     d2rq:property sb:revision_of ;
                     d2rq:refersToClassMap map:RecordingGroup ;
                     d2rq:condition "rel_recording_group_recording_group.link_type =315 " ;
-                    d2rq:alias "recording_group as rg1";
+                    d2rq:alias "recording_group as rg2";
                     d2rq:join "recording_group.recording_group=> rel_recording_group_recording_group.recording_group" ;
-                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg1.recording_group" .
+                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg2.recording_group" .
 
 
 map:rel_recording_group_recording_group_samples_material a d2rq:PropertyBridge ;
@@ -1179,9 +1179,9 @@ map:rel_recording_group_recording_group_samples_material a d2rq:PropertyBridge ;
                     d2rq:property sb:samples_material ;
                     d2rq:refersToClassMap map:RecordingGroup ;
                     d2rq:condition "rel_recording_group_recording_group.link_type =231 " ;
-                    d2rq:alias "recording_group as rg1";
+                    d2rq:alias "recording_group as rg3";
                     d2rq:join "recording_group.recording_group=> rel_recording_group_recording_group.recording_group" ;
-                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg1.recording_group" .
+                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg3.recording_group" .
 
 
 map:rel_recording_group_recording_group_compilation a d2rq:PropertyBridge ;
@@ -1189,9 +1189,9 @@ map:rel_recording_group_recording_group_compilation a d2rq:PropertyBridge ;
                     d2rq:property sb:compilation ;
                     d2rq:refersToClassMap map:RecordingGroup ;
                     d2rq:condition "rel_recording_group_recording_group.link_type =228 " ;
-                    d2rq:alias "recording_group as rg1";
+                    d2rq:alias "recording_group as rg4";
                     d2rq:join "recording_group.recording_group=> rel_recording_group_recording_group.recording_group" ;
-                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg1.recording_group" .
+                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg4.recording_group" .
 
 
 map:rel_recording_group_recording_group_remix a d2rq:PropertyBridge ;
@@ -1199,9 +1199,9 @@ map:rel_recording_group_recording_group_remix a d2rq:PropertyBridge ;
                     d2rq:property sb:remix ;
                     d2rq:refersToClassMap map:RecordingGroup ;
                     d2rq:condition "rel_recording_group_recording_group.link_type =230 " ;
-                    d2rq:alias "recording_group as rg1";
+                    d2rq:alias "recording_group as rg5";
                     d2rq:join "recording_group.recording_group=> rel_recording_group_recording_group.recording_group" ;
-                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg1.recording_group" .
+                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg5.recording_group" .
 
 
 map:rel_recording_group_recording_group_mashes_up a d2rq:PropertyBridge ;
@@ -1209,9 +1209,9 @@ map:rel_recording_group_recording_group_mashes_up a d2rq:PropertyBridge ;
                     d2rq:property sb:mashes_up ;
                     d2rq:refersToClassMap map:RecordingGroup ;
                     d2rq:condition "rel_recording_group_recording_group.link_type =232 " ;
-                    d2rq:alias "recording_group as rg1";
+                    d2rq:alias "recording_group as rg6";
                     d2rq:join "recording_group.recording_group=> rel_recording_group_recording_group.recording_group" ;
-                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg1.recording_group" .
+                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg6.recording_group" .
 
 
 map:rel_recording_group_recording_group_arrangement a d2rq:PropertyBridge ;
@@ -1219,9 +1219,9 @@ map:rel_recording_group_recording_group_arrangement a d2rq:PropertyBridge ;
                     d2rq:property sb:arrangement ;
                     d2rq:refersToClassMap map:RecordingGroup ;
                     d2rq:condition "rel_recording_group_recording_group.link_type =350 " ;
-                    d2rq:alias "recording_group as rg1";
+                    d2rq:alias "recording_group as rg7";
                     d2rq:join "recording_group.recording_group=> rel_recording_group_recording_group.recording_group" ;
-                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg1.recording_group" .
+                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg7.recording_group" .
 
 
 map:rel_recording_group_recording_group_remaster a d2rq:PropertyBridge ;
@@ -1229,9 +1229,9 @@ map:rel_recording_group_recording_group_remaster a d2rq:PropertyBridge ;
                     d2rq:property sb:remaster ;
                     d2rq:refersToClassMap map:RecordingGroup ;
                     d2rq:condition "rel_recording_group_recording_group.link_type =236 " ;
-                    d2rq:alias "recording_group as rg1";
+                    d2rq:alias "recording_group as rg8";
                     d2rq:join "recording_group.recording_group=> rel_recording_group_recording_group.recording_group" ;
-                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg1.recording_group" .
+                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg8.recording_group" .
 
 
 map:rel_recording_group_recording_group_based_on a d2rq:PropertyBridge ;
@@ -1239,9 +1239,9 @@ map:rel_recording_group_recording_group_based_on a d2rq:PropertyBridge ;
                     d2rq:property sb:based_on ;
                     d2rq:refersToClassMap map:RecordingGroup ;
                     d2rq:condition "rel_recording_group_recording_group.link_type =314 " ;
-                    d2rq:alias "recording_group as rg1";
+                    d2rq:alias "recording_group as rg9";
                     d2rq:join "recording_group.recording_group=> rel_recording_group_recording_group.recording_group" ;
-                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg1.recording_group" .
+                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg9.recording_group" .
 
 
 map:rel_recording_group_recording_group_first_track_release a d2rq:PropertyBridge ;
@@ -1249,9 +1249,9 @@ map:rel_recording_group_recording_group_first_track_release a d2rq:PropertyBridg
                     d2rq:property sb:first_track_release ;
                     d2rq:refersToClassMap map:RecordingGroup ;
                     d2rq:condition "rel_recording_group_recording_group.link_type =238 " ;
-                    d2rq:alias "recording_group as rg1";
+                    d2rq:alias "recording_group as rg10";
                     d2rq:join "recording_group.recording_group=> rel_recording_group_recording_group.recording_group" ;
-                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg1.recording_group" .
+                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg10.recording_group" .
 
 
 map:rel_recording_group_recording_group_medley a d2rq:PropertyBridge ;
@@ -1259,9 +1259,9 @@ map:rel_recording_group_recording_group_medley a d2rq:PropertyBridge ;
                     d2rq:property sb:medley ;
                     d2rq:refersToClassMap map:RecordingGroup ;
                     d2rq:condition "rel_recording_group_recording_group.link_type =239 " ;
-                    d2rq:alias "recording_group as rg1";
+                    d2rq:alias "recording_group as rg11";
                     d2rq:join "recording_group.recording_group=> rel_recording_group_recording_group.recording_group" ;
-                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg1.recording_group" .
+                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg11.recording_group" .
 
 
 map:rel_recording_group_recording_group_orchestration a d2rq:PropertyBridge ;
@@ -1269,9 +1269,9 @@ map:rel_recording_group_recording_group_orchestration a d2rq:PropertyBridge ;
                     d2rq:property sb:orchestration ;
                     d2rq:refersToClassMap map:RecordingGroup ;
                     d2rq:condition "rel_recording_group_recording_group.link_type =316 " ;
-                    d2rq:alias "recording_group as rg1";
+                    d2rq:alias "recording_group as rg12";
                     d2rq:join "recording_group.recording_group=> rel_recording_group_recording_group.recording_group" ;
-                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg1.recording_group" .
+                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg12.recording_group" .
 
 
 map:rel_recording_group_recording_group_karaoke a d2rq:PropertyBridge ;
@@ -1279,9 +1279,9 @@ map:rel_recording_group_recording_group_karaoke a d2rq:PropertyBridge ;
                     d2rq:property sb:karaoke ;
                     d2rq:refersToClassMap map:RecordingGroup ;
                     d2rq:condition "rel_recording_group_recording_group.link_type =226 " ;
-                    d2rq:alias "recording_group as rg1";
+                    d2rq:alias "recording_group as rg13";
                     d2rq:join "recording_group.recording_group=> rel_recording_group_recording_group.recording_group" ;
-                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg1.recording_group" .
+                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg13.recording_group" .
 
 
 map:rel_recording_group_recording_group_parts a d2rq:PropertyBridge ;
@@ -1289,9 +1289,9 @@ map:rel_recording_group_recording_group_parts a d2rq:PropertyBridge ;
                     d2rq:property sb:parts ;
                     d2rq:refersToClassMap map:RecordingGroup ;
                     d2rq:condition "rel_recording_group_recording_group.link_type =281 " ;
-                    d2rq:alias "recording_group as rg1";
+                    d2rq:alias "recording_group as rg14";
                     d2rq:join "recording_group.recording_group=> rel_recording_group_recording_group.recording_group" ;
-                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg1.recording_group" .
+                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg14.recording_group" .
 
 
 map:rel_recording_group_recording_group_edit a d2rq:PropertyBridge ;
@@ -1299,9 +1299,9 @@ map:rel_recording_group_recording_group_edit a d2rq:PropertyBridge ;
                     d2rq:property sb:edit ;
                     d2rq:refersToClassMap map:RecordingGroup ;
                     d2rq:condition "rel_recording_group_recording_group.link_type =309 " ;
-                    d2rq:alias "recording_group as rg1";
+                    d2rq:alias "recording_group as rg15";
                     d2rq:join "recording_group.recording_group=> rel_recording_group_recording_group.recording_group" ;
-                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg1.recording_group" .
+                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg15.recording_group" .
 
 
 map:rel_recording_group_recording_group_other_version a d2rq:PropertyBridge ;
@@ -1309,9 +1309,9 @@ map:rel_recording_group_recording_group_other_version a d2rq:PropertyBridge ;
                     d2rq:property sb:other_version ;
                     d2rq:refersToClassMap map:RecordingGroup ;
                     d2rq:condition "rel_recording_group_recording_group.link_type =241 " ;
-                    d2rq:alias "recording_group as rg1";
+                    d2rq:alias "recording_group as rg16";
                     d2rq:join "recording_group.recording_group=> rel_recording_group_recording_group.recording_group" ;
-                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg1.recording_group" .
+                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg16.recording_group" .
 
 
 map:rel_artist_artist_married a d2rq:PropertyBridge ;
@@ -1319,9 +1319,9 @@ map:rel_artist_artist_married a d2rq:PropertyBridge ;
                     d2rq:property sb:married ;
                     d2rq:refersToClassMap map:Artist ;
                     d2rq:condition "rel_artist_artist.link_type =111 " ;
-                    d2rq:alias "musicbrainz.artist as rg1";
+                    d2rq:alias "musicbrainz.artist as rg17";
                     d2rq:join "musicbrainz.artist.id=> rel_artist_artist.artist" ;
-                    d2rq:join "rel_artist_artist.artist2 => rg1.id" .
+                    d2rq:join "rel_artist_artist.artist2 => rg17.id" .
 
 
 map:rel_artist_artist_voice_actor a d2rq:PropertyBridge ;
@@ -1329,9 +1329,9 @@ map:rel_artist_artist_voice_actor a d2rq:PropertyBridge ;
                     d2rq:property sb:voice_actor ;
                     d2rq:refersToClassMap map:Artist ;
                     d2rq:condition "rel_artist_artist.link_type =292 " ;
-                    d2rq:alias "musicbrainz.artist as rg1";
+                    d2rq:alias "musicbrainz.artist as rg18";
                     d2rq:join "musicbrainz.artist.id=> rel_artist_artist.artist" ;
-                    d2rq:join "rel_artist_artist.artist2 => rg1.id" .
+                    d2rq:join "rel_artist_artist.artist2 => rg18.id" .
 
 
 map:rel_artist_artist_composer-in-residence a d2rq:PropertyBridge ;
@@ -1339,9 +1339,9 @@ map:rel_artist_artist_composer-in-residence a d2rq:PropertyBridge ;
                     d2rq:property sb:composer-in-residence ;
                     d2rq:refersToClassMap map:Artist ;
                     d2rq:condition "rel_artist_artist.link_type =855 " ;
-                    d2rq:alias "musicbrainz.artist as rg1";
+                    d2rq:alias "musicbrainz.artist as rg19";
                     d2rq:join "musicbrainz.artist.id=> rel_artist_artist.artist" ;
-                    d2rq:join "rel_artist_artist.artist2 => rg1.id" .
+                    d2rq:join "rel_artist_artist.artist2 => rg19.id" .
 
 
 map:rel_artist_artist_instrumental_supporting_musician a d2rq:PropertyBridge ;
@@ -1349,9 +1349,9 @@ map:rel_artist_artist_instrumental_supporting_musician a d2rq:PropertyBridge ;
                     d2rq:property sb:instrumental_supporting_musician ;
                     d2rq:refersToClassMap map:Artist ;
                     d2rq:condition "rel_artist_artist.link_type =105 " ;
-                    d2rq:alias "musicbrainz.artist as rg1";
+                    d2rq:alias "musicbrainz.artist as rg20";
                     d2rq:join "musicbrainz.artist.id=> rel_artist_artist.artist" ;
-                    d2rq:join "rel_artist_artist.artist2 => rg1.id" .
+                    d2rq:join "rel_artist_artist.artist2 => rg20.id" .
 
 
 map:rel_artist_artist_vocal_supporting_musician a d2rq:PropertyBridge ;
@@ -1359,9 +1359,9 @@ map:rel_artist_artist_vocal_supporting_musician a d2rq:PropertyBridge ;
                     d2rq:property sb:vocal_supporting_musician ;
                     d2rq:refersToClassMap map:Artist ;
                     d2rq:condition "rel_artist_artist.link_type =107 " ;
-                    d2rq:alias "musicbrainz.artist as rg1";
+                    d2rq:alias "musicbrainz.artist as rg21";
                     d2rq:join "musicbrainz.artist.id=> rel_artist_artist.artist" ;
-                    d2rq:join "rel_artist_artist.artist2 => rg1.id" .
+                    d2rq:join "rel_artist_artist.artist2 => rg21.id" .
 
 
 map:rel_artist_artist_parent a d2rq:PropertyBridge ;
@@ -1369,9 +1369,9 @@ map:rel_artist_artist_parent a d2rq:PropertyBridge ;
                     d2rq:property sb:parent ;
                     d2rq:refersToClassMap map:Artist ;
                     d2rq:condition "rel_artist_artist.link_type =109 " ;
-                    d2rq:alias "musicbrainz.artist as rg1";
+                    d2rq:alias "musicbrainz.artist as rg22";
                     d2rq:join "musicbrainz.artist.id=> rel_artist_artist.artist" ;
-                    d2rq:join "rel_artist_artist.artist2 => rg1.id" .
+                    d2rq:join "rel_artist_artist.artist2 => rg22.id" .
 
 
 map:rel_artist_artist_member_of_band a d2rq:PropertyBridge ;
@@ -1379,9 +1379,9 @@ map:rel_artist_artist_member_of_band a d2rq:PropertyBridge ;
                     d2rq:property sb:member_of_band ;
                     d2rq:refersToClassMap map:Artist ;
                     d2rq:condition "rel_artist_artist.link_type =103 " ;
-                    d2rq:alias "musicbrainz.artist as rg1";
+                    d2rq:alias "musicbrainz.artist as rg23";
                     d2rq:join "musicbrainz.artist.id=> rel_artist_artist.artist" ;
-                    d2rq:join "rel_artist_artist.artist2 => rg1.id" .
+                    d2rq:join "rel_artist_artist.artist2 => rg23.id" .
 
 
 map:rel_artist_artist_collaboration a d2rq:PropertyBridge ;
@@ -1389,9 +1389,9 @@ map:rel_artist_artist_collaboration a d2rq:PropertyBridge ;
                     d2rq:property sb:collaboration ;
                     d2rq:refersToClassMap map:Artist ;
                     d2rq:condition "rel_artist_artist.link_type =102 " ;
-                    d2rq:alias "musicbrainz.artist as rg1";
+                    d2rq:alias "musicbrainz.artist as rg24";
                     d2rq:join "musicbrainz.artist.id=> rel_artist_artist.artist" ;
-                    d2rq:join "rel_artist_artist.artist2 => rg1.id" .
+                    d2rq:join "rel_artist_artist.artist2 => rg24.id" .
 
 
 map:rel_artist_artist_tribute a d2rq:PropertyBridge ;
@@ -1399,9 +1399,9 @@ map:rel_artist_artist_tribute a d2rq:PropertyBridge ;
                     d2rq:property sb:tribute ;
                     d2rq:refersToClassMap map:Artist ;
                     d2rq:condition "rel_artist_artist.link_type =728 " ;
-                    d2rq:alias "musicbrainz.artist as rg1";
+                    d2rq:alias "musicbrainz.artist as rg25";
                     d2rq:join "musicbrainz.artist.id=> rel_artist_artist.artist" ;
-                    d2rq:join "rel_artist_artist.artist2 => rg1.id" .
+                    d2rq:join "rel_artist_artist.artist2 => rg25.id" .
 
 
 map:rel_artist_artist_involved_with a d2rq:PropertyBridge ;
@@ -1409,9 +1409,9 @@ map:rel_artist_artist_involved_with a d2rq:PropertyBridge ;
                     d2rq:property sb:involved_with ;
                     d2rq:refersToClassMap map:Artist ;
                     d2rq:condition "rel_artist_artist.link_type =112 " ;
-                    d2rq:alias "musicbrainz.artist as rg1";
+                    d2rq:alias "musicbrainz.artist as rg26";
                     d2rq:join "musicbrainz.artist.id=> rel_artist_artist.artist" ;
-                    d2rq:join "rel_artist_artist.artist2 => rg1.id" .
+                    d2rq:join "rel_artist_artist.artist2 => rg26.id" .
 
 
 map:rel_artist_artist_conductor_position a d2rq:PropertyBridge ;
@@ -1419,9 +1419,9 @@ map:rel_artist_artist_conductor_position a d2rq:PropertyBridge ;
                     d2rq:property sb:conductor_position ;
                     d2rq:refersToClassMap map:Artist ;
                     d2rq:condition "rel_artist_artist.link_type =305 " ;
-                    d2rq:alias "musicbrainz.artist as rg1";
+                    d2rq:alias "musicbrainz.artist as rg27";
                     d2rq:join "musicbrainz.artist.id=> rel_artist_artist.artist" ;
-                    d2rq:join "rel_artist_artist.artist2 => rg1.id" .
+                    d2rq:join "rel_artist_artist.artist2 => rg27.id" .
 
 
 map:rel_artist_artist_supporting_musician a d2rq:PropertyBridge ;
@@ -1429,9 +1429,9 @@ map:rel_artist_artist_supporting_musician a d2rq:PropertyBridge ;
                     d2rq:property sb:supporting_musician ;
                     d2rq:refersToClassMap map:Artist ;
                     d2rq:condition "rel_artist_artist.link_type =104 " ;
-                    d2rq:alias "musicbrainz.artist as rg1";
+                    d2rq:alias "musicbrainz.artist as rg28";
                     d2rq:join "musicbrainz.artist.id=> rel_artist_artist.artist" ;
-                    d2rq:join "rel_artist_artist.artist2 => rg1.id" .
+                    d2rq:join "rel_artist_artist.artist2 => rg28.id" .
 
 
 map:rel_artist_artist_teacher a d2rq:PropertyBridge ;
@@ -1439,9 +1439,9 @@ map:rel_artist_artist_teacher a d2rq:PropertyBridge ;
                     d2rq:property sb:teacher ;
                     d2rq:refersToClassMap map:Artist ;
                     d2rq:condition "rel_artist_artist.link_type =847 " ;
-                    d2rq:alias "musicbrainz.artist as rg1";
+                    d2rq:alias "musicbrainz.artist as rg29";
                     d2rq:join "musicbrainz.artist.id=> rel_artist_artist.artist" ;
-                    d2rq:join "rel_artist_artist.artist2 => rg1.id" .
+                    d2rq:join "rel_artist_artist.artist2 => rg29.id" .
 
 
 map:rel_artist_artist_sibling a d2rq:PropertyBridge ;
@@ -1449,9 +1449,9 @@ map:rel_artist_artist_sibling a d2rq:PropertyBridge ;
                     d2rq:property sb:sibling ;
                     d2rq:refersToClassMap map:Artist ;
                     d2rq:condition "rel_artist_artist.link_type =110 " ;
-                    d2rq:alias "musicbrainz.artist as rg1";
+                    d2rq:alias "musicbrainz.artist as rg30";
                     d2rq:join "musicbrainz.artist.id=> rel_artist_artist.artist" ;
-                    d2rq:join "rel_artist_artist.artist2 => rg1.id" .
+                    d2rq:join "rel_artist_artist.artist2 => rg30.id" .
 
 
 map:rel_artist_artist_subgroup a d2rq:PropertyBridge ;
@@ -1459,9 +1459,9 @@ map:rel_artist_artist_subgroup a d2rq:PropertyBridge ;
                     d2rq:property sb:subgroup ;
                     d2rq:refersToClassMap map:Artist ;
                     d2rq:condition "rel_artist_artist.link_type =722 " ;
-                    d2rq:alias "musicbrainz.artist as rg1";
+                    d2rq:alias "musicbrainz.artist as rg31";
                     d2rq:join "musicbrainz.artist.id=> rel_artist_artist.artist" ;
-                    d2rq:join "rel_artist_artist.artist2 => rg1.id" .
+                    d2rq:join "rel_artist_artist.artist2 => rg31.id" .
 
 
 map:rel_artist_artist_founder a d2rq:PropertyBridge ;
@@ -1469,9 +1469,9 @@ map:rel_artist_artist_founder a d2rq:PropertyBridge ;
                     d2rq:property sb:founder ;
                     d2rq:refersToClassMap map:Artist ;
                     d2rq:condition "rel_artist_artist.link_type =895 " ;
-                    d2rq:alias "musicbrainz.artist as rg1";
+                    d2rq:alias "musicbrainz.artist as rg32";
                     d2rq:join "musicbrainz.artist.id=> rel_artist_artist.artist" ;
-                    d2rq:join "rel_artist_artist.artist2 => rg1.id" .
+                    d2rq:join "rel_artist_artist.artist2 => rg32.id" .
 
 
 map:rel_artist_artist_is_person a d2rq:PropertyBridge ;
@@ -1479,9 +1479,9 @@ map:rel_artist_artist_is_person a d2rq:PropertyBridge ;
                     d2rq:property sb:is_person ;
                     d2rq:refersToClassMap map:Artist ;
                     d2rq:condition "rel_artist_artist.link_type =108 " ;
-                    d2rq:alias "musicbrainz.artist as rg1";
+                    d2rq:alias "musicbrainz.artist as rg33";
                     d2rq:join "musicbrainz.artist.id=> rel_artist_artist.artist" ;
-                    d2rq:join "rel_artist_artist.artist2 => rg1.id" .
+                    d2rq:join "rel_artist_artist.artist2 => rg33.id" .
 
 
 map:rel_release_group_release_group_part_of_set a d2rq:PropertyBridge ;
@@ -1489,9 +1489,9 @@ map:rel_release_group_release_group_part_of_set a d2rq:PropertyBridge ;
                     d2rq:property sb:part_of_set ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
                     d2rq:condition "rel_release_group_release_group.link_type =1 " ;
-                    d2rq:alias "musicbrainz.release_group as rg1";
+                    d2rq:alias "musicbrainz.release_group as rg34";
                     d2rq:join "musicbrainz.release_group.gid=> rel_release_group_release_group.release_group" ;
-                    d2rq:join "rel_release_group_release_group.release_group2 => rg1.gid" .
+                    d2rq:join "rel_release_group_release_group.release_group2 => rg34.gid" .
 
 
 map:rel_release_group_release_group_remaster a d2rq:PropertyBridge ;
@@ -1499,9 +1499,9 @@ map:rel_release_group_release_group_remaster a d2rq:PropertyBridge ;
                     d2rq:property sb:remaster ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
                     d2rq:condition "rel_release_group_release_group.link_type =6 " ;
-                    d2rq:alias "musicbrainz.release_group as rg1";
+                    d2rq:alias "musicbrainz.release_group as rg35";
                     d2rq:join "musicbrainz.release_group.gid=> rel_release_group_release_group.release_group" ;
-                    d2rq:join "rel_release_group_release_group.release_group2 => rg1.gid" .
+                    d2rq:join "rel_release_group_release_group.release_group2 => rg35.gid" .
 
 
 map:rel_release_group_release_group_supporting_release a d2rq:PropertyBridge ;
@@ -1509,9 +1509,9 @@ map:rel_release_group_release_group_supporting_release a d2rq:PropertyBridge ;
                     d2rq:property sb:supporting_release ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
                     d2rq:condition "rel_release_group_release_group.link_type =3 " ;
-                    d2rq:alias "musicbrainz.release_group as rg1";
+                    d2rq:alias "musicbrainz.release_group as rg36";
                     d2rq:join "musicbrainz.release_group.gid=> rel_release_group_release_group.release_group" ;
-                    d2rq:join "rel_release_group_release_group.release_group2 => rg1.gid" .
+                    d2rq:join "rel_release_group_release_group.release_group2 => rg36.gid" .
 
 
 map:rel_release_group_release_group_transl-tracklisting a d2rq:PropertyBridge ;
@@ -1519,9 +1519,9 @@ map:rel_release_group_release_group_transl-tracklisting a d2rq:PropertyBridge ;
                     d2rq:property sb:transl-tracklisting ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
                     d2rq:condition "rel_release_group_release_group.link_type =2 " ;
-                    d2rq:alias "musicbrainz.release_group as rg1";
+                    d2rq:alias "musicbrainz.release_group as rg37";
                     d2rq:join "musicbrainz.release_group.gid=> rel_release_group_release_group.release_group" ;
-                    d2rq:join "rel_release_group_release_group.release_group2 => rg1.gid" .
+                    d2rq:join "rel_release_group_release_group.release_group2 => rg37.gid" .
 
 
 map:rel_area_recording_group_recorded_in a d2rq:PropertyBridge ;
@@ -1727,9 +1727,9 @@ map:rel_area_area_part_of a d2rq:PropertyBridge ;
                     d2rq:property sb:part_of ;
                     d2rq:refersToClassMap map:Area ;
                     d2rq:condition "rel_area_area.link_type =356 " ;
-                    d2rq:alias "musicbrainz.area as rg1";
+                    d2rq:alias "musicbrainz.area as rg38";
                     d2rq:join "musicbrainz.area.id=> rel_area_area.area_id" ;
-                    d2rq:join "rel_area_area.area_id2 => rg1.id" .
+                    d2rq:join "rel_area_area.area_id2 => rg38.id" .
 
 
 map:rel_place_recording_group_recorded_at a d2rq:PropertyBridge ;
@@ -1924,11 +1924,11 @@ map:rel_place_release_group_mixed_at a d2rq:PropertyBridge ;
 map:rel_place_place_parts a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Place ;
                     d2rq:property sb:parts ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
+                    d2rq:refersToClassMap map:Place ;
                     d2rq:condition "rel_place_place.link_type =717 " ;
-                    d2rq:alias "musicbrainz.place as rg1";
+                    d2rq:alias "musicbrainz.place as rg39";
                     d2rq:join "musicbrainz.place.id=> rel_place_place.place_id" ;
-                    d2rq:join "rel_place_place.place_id2 => rg1.id" .
+                    d2rq:join "rel_place_place.place_id2 => rg39.id" .
 
 
 map:rel_label_label_label_rename a d2rq:PropertyBridge ;
@@ -1936,9 +1936,9 @@ map:rel_label_label_label_rename a d2rq:PropertyBridge ;
                     d2rq:property sb:label_rename ;
                     d2rq:refersToClassMap map:Label ;
                     d2rq:condition "rel_label_label.link_type =202 " ;
-                    d2rq:alias "musicbrainz.label as rg1";
+                    d2rq:alias "musicbrainz.label as rg40";
                     d2rq:join "musicbrainz.label.id=> rel_label_label.label_id" ;
-                    d2rq:join "rel_label_label.label_id2 => rg1.id" .
+                    d2rq:join "rel_label_label.label_id2 => rg40.id" .
 
 
 map:rel_label_label_label_reissue a d2rq:PropertyBridge ;
@@ -1946,9 +1946,9 @@ map:rel_label_label_label_reissue a d2rq:PropertyBridge ;
                     d2rq:property sb:label_reissue ;
                     d2rq:refersToClassMap map:Label ;
                     d2rq:condition "rel_label_label.link_type =201 " ;
-                    d2rq:alias "musicbrainz.label as rg1";
+                    d2rq:alias "musicbrainz.label as rg41";
                     d2rq:join "musicbrainz.label.id=> rel_label_label.label_id" ;
-                    d2rq:join "rel_label_label.label_id2 => rg1.id" .
+                    d2rq:join "rel_label_label.label_id2 => rg41.id" .
 
 
 map:rel_label_label_imprint a d2rq:PropertyBridge ;
@@ -1956,9 +1956,9 @@ map:rel_label_label_imprint a d2rq:PropertyBridge ;
                     d2rq:property sb:imprint ;
                     d2rq:refersToClassMap map:Label ;
                     d2rq:condition "rel_label_label.link_type =725 " ;
-                    d2rq:alias "musicbrainz.label as rg1";
+                    d2rq:alias "musicbrainz.label as rg42";
                     d2rq:join "musicbrainz.label.id=> rel_label_label.label_id" ;
-                    d2rq:join "rel_label_label.label_id2 => rg1.id" .
+                    d2rq:join "rel_label_label.label_id2 => rg42.id" .
 
 
 map:rel_label_label_label_distribution a d2rq:PropertyBridge ;
@@ -1966,9 +1966,9 @@ map:rel_label_label_label_distribution a d2rq:PropertyBridge ;
                     d2rq:property sb:label_distribution ;
                     d2rq:refersToClassMap map:Label ;
                     d2rq:condition "rel_label_label.link_type =203 " ;
-                    d2rq:alias "musicbrainz.label as rg1";
+                    d2rq:alias "musicbrainz.label as rg43";
                     d2rq:join "musicbrainz.label.id=> rel_label_label.label_id" ;
-                    d2rq:join "rel_label_label.label_id2 => rg1.id" .
+                    d2rq:join "rel_label_label.label_id2 => rg43.id" .
 
 
 map:rel_label_label_label_ownership a d2rq:PropertyBridge ;
@@ -1976,9 +1976,9 @@ map:rel_label_label_label_ownership a d2rq:PropertyBridge ;
                     d2rq:property sb:label_ownership ;
                     d2rq:refersToClassMap map:Label ;
                     d2rq:condition "rel_label_label.link_type =200 " ;
-                    d2rq:alias "musicbrainz.label as rg1";
+                    d2rq:alias "musicbrainz.label as rg44";
                     d2rq:join "musicbrainz.label.id=> rel_label_label.label_id" ;
-                    d2rq:join "rel_label_label.label_id2 => rg1.id" .
+                    d2rq:join "rel_label_label.label_id2 => rg44.id" .
 
 
 map:rel_label_recording_group_phonographic_copyright a d2rq:PropertyBridge ;
