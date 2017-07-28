@@ -27,8 +27,8 @@
 map:database a d2rq:Database ;
     d2rq:jdbcDriver "org.postgresql.Driver" ;
     d2rq:jdbcDSN "jdbc:postgresql://localhost/musicbrainz" ;
-    d2rq:username "" ;
-    d2rq:password "" ;
+    d2rq:username "postgres" ;
+    d2rq:password "" .
     # relatively crude to limit db load
     #d2rq:resultSizeLimit "1000" .
     # jdbc:socketTimeout "30" ;
@@ -98,8 +98,8 @@ map:release_group_credit a d2rq:PropertyBridge ;
     d2rq:belongsToClassMap map:ReleaseGroup ;
     d2rq:property foaf:maker ;
     d2rq:refersToClassMap map:Artist ;
-    d2rq:join "musicbrainz.release_group.gid => release_group_artist.release_group" ;
-    d2rq:join "release_group_artist.artist => musicbrainz.artist.id" .
+    d2rq:join "musicbrainz.release_group.gid => simplebrainz.release_group_artist.release_group" ;
+    d2rq:join "simplebrainz.release_group_artist.artist => musicbrainz.artist.id" .
 
 
 ########################################
@@ -108,7 +108,7 @@ map:release_group_credit a d2rq:PropertyBridge ;
 
 map:RecordingGroup a d2rq:ClassMap ;
     d2rq:dataStorage map:database ;
-    d2rq:uriPattern "http://musicbrainz.org/recording_group/@@recording_group.recording_group@@" ;
+    d2rq:uriPattern "http://musicbrainz.org/work/@@simplebrainz.recording_group.recording_group@@" ;
     d2rq:class mo:MusicalWork ;
     d2rq:classDefinitionLabel "MusicalWork"@en .
 
@@ -122,15 +122,15 @@ map:RecordingGroup a d2rq:ClassMap ;
 map:recording_group_name a d2rq:PropertyBridge ;
     d2rq:belongsToClassMap map:RecordingGroup ;
     d2rq:property rdfs:label ;
-    d2rq:column "recording_group.name" ;
+    d2rq:column "simplebrainz.recording_group.name" ;
     d2rq:datatype xsd:string .
 	
 map:recording_group_credit a d2rq:PropertyBridge ;
     d2rq:belongsToClassMap map:RecordingGroup ;
     d2rq:property foaf:maker ;
     d2rq:refersToClassMap map:Artist ;
-    d2rq:join "recording_group.recording_group => recording_group_artist.recording_group" ;
-    d2rq:join "recording_group_artist.artist => musicbrainz.artist.id" .
+    d2rq:join "simplebrainz.recording_group.recording_group => simplebrainz.recording_group_artist.recording_group" ;
+    d2rq:join "simplebrainz.recording_group_artist.artist => musicbrainz.artist.id" .
 
 
 ########################################
@@ -199,1982 +199,1056 @@ map:label_area a d2rq:PropertyBridge ;
 ########################################
 
 
-map:rel_artist_recording_group_recording a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:recording ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =128 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_vocal a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:vocal ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =149 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_publishing a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:publishing ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =161 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_reconstructed_by a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:reconstructed_by ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =917 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_dedication a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:dedication ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =846 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_video_appearance a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:video_appearance ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =858 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_mix a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:mix ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =143 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_programming a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:programming ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =132 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_commissioned a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:commissioned ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =889 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_art_direction a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:art_direction ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =137 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_chorus_master a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:chorus_master ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =152 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_conductor a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:conductor ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =151 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_balance a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:balance ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =726 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_translator a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:translator ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =872 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_misc a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:misc ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =129 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_arranger a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:arranger ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =297 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_instrument_arranger a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:instrument_arranger ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =158 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_orchestrator a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:orchestrator ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =164 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_booking a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:booking ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =134 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_phonographic_copyright a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:phonographic_copyright ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =869 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_lyricist a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:lyricist ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =165 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_remixer a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:remixer ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =153 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_writer a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:writer ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =167 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_concertmaster a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:concertmaster ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =760 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_design_illustration a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:design_illustration ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =130 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_vocal_arranger a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:vocal_arranger ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =298 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_compiler a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:compiler ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =147 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_mix-DJ a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:mix-DJ ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =155 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_instrument a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:instrument ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =148 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_librettist a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:librettist ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =169 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_composer a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:composer ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =168 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_producer a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:producer ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =141 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_photography a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:photography ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =123 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_editor a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:editor ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =144 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_artists_and_repertoire a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:artists_and_repertoire ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =135 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_misc a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:misc ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =162 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_legal_representation a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:legal_representation ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =142 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_creative_direction a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:creative_direction ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =146 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_publishing a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:publishing ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =127 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_vocal_arranger a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:vocal_arranger ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =294 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_orchestrator a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:orchestrator ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =300 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_engineer a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:engineer ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =138 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_arranger a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:arranger ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =293 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_graphic_design a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:graphic_design ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =125 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_samples_from_artist a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:samples_from_artist ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =154 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_performer a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:performer ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =156 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_instrument_arranger a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:instrument_arranger ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =282 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_sound a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:sound ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =133 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_mastering a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:mastering ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =136 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_performing_orchestra a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:performing_orchestra ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =150 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_audio a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:audio ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =140 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_previous_attribution a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:previous_attribution ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =834 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_artist_recording_group_revised_by a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Artist ;
-                    d2rq:property sb:revised_by ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_artist_recording_group.link_type =844 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_recording_group.artist_id" ;
-                    d2rq:join "rel_artist_recording_group.recording_group => recording_group.recording_group" .
-
-
 map:rel_artist_release_group_photography a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:photography ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =20 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =20 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_sound a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:sound ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =29 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =29 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_copyright a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:copyright ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =709 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =709 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_instrument a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:instrument ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =44 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =44 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_writer a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:writer ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =54 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =54 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_producer a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:producer ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =30 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =30 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_concertmaster a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:concertmaster ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =759 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =759 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_art_direction a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:art_direction ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =18 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =18 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_mastering a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:mastering ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =42 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =42 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_publishing a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:publishing ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =32 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =32 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_audio a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:audio ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =31 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =31 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_legal_representation a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:legal_representation ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =22 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =22 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_vocal_arranger a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:vocal_arranger ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =296 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =296 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_samples_from_artist a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:samples_from_artist ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =49 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =49 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_lyricist a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:lyricist ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =56 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =56 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_orchestrator a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:orchestrator ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =40 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =40 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_remixer a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:remixer ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =47 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =47 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_engineer a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:engineer ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =28 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =28 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_artists_and_repertoire a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:artists_and_repertoire ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =62 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =62 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_liner_notes a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:liner_notes ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =24 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =24 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_booking a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:booking ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =23 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =23 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_editor a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:editor ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =38 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =38 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_librettist a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:librettist ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =57 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =57 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_graphic_design a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:graphic_design ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =27 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =27 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_programming a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:programming ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =37 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =37 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_mix a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:mix ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =26 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =26 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_conductor a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:conductor ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =46 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =46 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_composer a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:composer ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =55 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =55 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_instrument_arranger a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:instrument_arranger ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =41 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =41 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_mix-DJ a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:mix-DJ ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =43 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =43 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_design_illustration a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:design_illustration ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =19 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =19 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_phonographic_copyright a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:phonographic_copyright ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =710 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =710 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_compiler a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:compiler ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =48 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =48 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_dedicated_to a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:dedicated_to ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =868 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =868 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_tribute a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:tribute ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =65 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =65 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_recording a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:recording ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =36 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =36 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_creative_direction a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:creative_direction ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =63 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =63 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_performer a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:performer ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =51 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =51 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_vocal a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:vocal ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =60 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =60 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_arranger a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:arranger ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =295 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =295 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_misc a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:misc ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =25 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =25 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_translator a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:translator ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =871 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =871 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_performing_orchestra a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:performing_orchestra ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =45 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =45 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_chorus_master a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:chorus_master ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =53 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =53 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_release_group_balance a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:balance ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_artist_release_group.link_type =727 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_release_group.artist_id" ;
-                    d2rq:join "rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_artist_release_group.link_type =727 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_release_group.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_place_recording_engineer_position a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:recording_engineer_position ;
                     d2rq:refersToClassMap map:Place ;
-                    d2rq:condition "rel_artist_place.link_type =702 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_place.artist_id" ;
-                    d2rq:join "rel_artist_place.place_id => musicbrainz.place.id" .
+                    d2rq:condition "simplebrainz.rel_artist_place.link_type =702 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_place.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_place.place_id => musicbrainz.place.id" .
 
 
 map:rel_artist_place_mixing_engineer_position a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:mixing_engineer_position ;
                     d2rq:refersToClassMap map:Place ;
-                    d2rq:condition "rel_artist_place.link_type =703 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_place.artist_id" ;
-                    d2rq:join "rel_artist_place.place_id => musicbrainz.place.id" .
+                    d2rq:condition "simplebrainz.rel_artist_place.link_type =703 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_place.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_place.place_id => musicbrainz.place.id" .
 
 
 map:rel_artist_place_organist a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:organist ;
                     d2rq:refersToClassMap map:Place ;
-                    d2rq:condition "rel_artist_place.link_type =856 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_place.artist_id" ;
-                    d2rq:join "rel_artist_place.place_id => musicbrainz.place.id" .
+                    d2rq:condition "simplebrainz.rel_artist_place.link_type =856 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_place.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_place.place_id => musicbrainz.place.id" .
 
 
 map:rel_artist_place_founder a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:founder ;
                     d2rq:refersToClassMap map:Place ;
-                    d2rq:condition "rel_artist_place.link_type =832 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_place.artist_id" ;
-                    d2rq:join "rel_artist_place.place_id => musicbrainz.place.id" .
+                    d2rq:condition "simplebrainz.rel_artist_place.link_type =832 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_place.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_place.place_id => musicbrainz.place.id" .
 
 
 map:rel_artist_place_engineer_position a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:engineer_position ;
                     d2rq:refersToClassMap map:Place ;
-                    d2rq:condition "rel_artist_place.link_type =701 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_place.artist_id" ;
-                    d2rq:join "rel_artist_place.place_id => musicbrainz.place.id" .
+                    d2rq:condition "simplebrainz.rel_artist_place.link_type =701 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_place.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_place.place_id => musicbrainz.place.id" .
 
 
 map:rel_artist_place_primary_concert_venue a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:primary_concert_venue ;
                     d2rq:refersToClassMap map:Place ;
-                    d2rq:condition "rel_artist_place.link_type =714 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_place.artist_id" ;
-                    d2rq:join "rel_artist_place.place_id => musicbrainz.place.id" .
+                    d2rq:condition "simplebrainz.rel_artist_place.link_type =714 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_place.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_place.place_id => musicbrainz.place.id" .
 
 
 map:rel_artist_place_mastering_engineer_position a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:mastering_engineer_position ;
                     d2rq:refersToClassMap map:Place ;
-                    d2rq:condition "rel_artist_place.link_type =704 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_place.artist_id" ;
-                    d2rq:join "rel_artist_place.place_id => musicbrainz.place.id" .
-
-
-map:rel_recording_group_recording_group_music_video a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:RecordingGroup ;
-                    d2rq:property sb:music_video ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_recording_group_recording_group.link_type =857 " ;
-                    d2rq:alias "recording_group as rg0";
-                    d2rq:join "recording_group.recording_group=> rel_recording_group_recording_group.recording_group" ;
-                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg0.recording_group" .
-
-
-map:rel_recording_group_recording_group_DJ-mix a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:RecordingGroup ;
-                    d2rq:property sb:DJ-mix ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_recording_group_recording_group.link_type =227 " ;
-                    d2rq:alias "recording_group as rg1";
-                    d2rq:join "recording_group.recording_group=> rel_recording_group_recording_group.recording_group" ;
-                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg1.recording_group" .
-
-
-map:rel_recording_group_recording_group_revision_of a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:RecordingGroup ;
-                    d2rq:property sb:revision_of ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_recording_group_recording_group.link_type =315 " ;
-                    d2rq:alias "recording_group as rg2";
-                    d2rq:join "recording_group.recording_group=> rel_recording_group_recording_group.recording_group" ;
-                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg2.recording_group" .
-
-
-map:rel_recording_group_recording_group_samples_material a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:RecordingGroup ;
-                    d2rq:property sb:samples_material ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_recording_group_recording_group.link_type =231 " ;
-                    d2rq:alias "recording_group as rg3";
-                    d2rq:join "recording_group.recording_group=> rel_recording_group_recording_group.recording_group" ;
-                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg3.recording_group" .
-
-
-map:rel_recording_group_recording_group_compilation a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:RecordingGroup ;
-                    d2rq:property sb:compilation ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_recording_group_recording_group.link_type =228 " ;
-                    d2rq:alias "recording_group as rg4";
-                    d2rq:join "recording_group.recording_group=> rel_recording_group_recording_group.recording_group" ;
-                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg4.recording_group" .
-
-
-map:rel_recording_group_recording_group_remix a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:RecordingGroup ;
-                    d2rq:property sb:remix ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_recording_group_recording_group.link_type =230 " ;
-                    d2rq:alias "recording_group as rg5";
-                    d2rq:join "recording_group.recording_group=> rel_recording_group_recording_group.recording_group" ;
-                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg5.recording_group" .
-
-
-map:rel_recording_group_recording_group_mashes_up a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:RecordingGroup ;
-                    d2rq:property sb:mashes_up ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_recording_group_recording_group.link_type =232 " ;
-                    d2rq:alias "recording_group as rg6";
-                    d2rq:join "recording_group.recording_group=> rel_recording_group_recording_group.recording_group" ;
-                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg6.recording_group" .
-
-
-map:rel_recording_group_recording_group_arrangement a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:RecordingGroup ;
-                    d2rq:property sb:arrangement ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_recording_group_recording_group.link_type =350 " ;
-                    d2rq:alias "recording_group as rg7";
-                    d2rq:join "recording_group.recording_group=> rel_recording_group_recording_group.recording_group" ;
-                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg7.recording_group" .
-
-
-map:rel_recording_group_recording_group_remaster a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:RecordingGroup ;
-                    d2rq:property sb:remaster ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_recording_group_recording_group.link_type =236 " ;
-                    d2rq:alias "recording_group as rg8";
-                    d2rq:join "recording_group.recording_group=> rel_recording_group_recording_group.recording_group" ;
-                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg8.recording_group" .
-
-
-map:rel_recording_group_recording_group_based_on a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:RecordingGroup ;
-                    d2rq:property sb:based_on ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_recording_group_recording_group.link_type =314 " ;
-                    d2rq:alias "recording_group as rg9";
-                    d2rq:join "recording_group.recording_group=> rel_recording_group_recording_group.recording_group" ;
-                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg9.recording_group" .
-
-
-map:rel_recording_group_recording_group_first_track_release a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:RecordingGroup ;
-                    d2rq:property sb:first_track_release ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_recording_group_recording_group.link_type =238 " ;
-                    d2rq:alias "recording_group as rg10";
-                    d2rq:join "recording_group.recording_group=> rel_recording_group_recording_group.recording_group" ;
-                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg10.recording_group" .
-
-
-map:rel_recording_group_recording_group_medley a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:RecordingGroup ;
-                    d2rq:property sb:medley ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_recording_group_recording_group.link_type =239 " ;
-                    d2rq:alias "recording_group as rg11";
-                    d2rq:join "recording_group.recording_group=> rel_recording_group_recording_group.recording_group" ;
-                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg11.recording_group" .
-
-
-map:rel_recording_group_recording_group_orchestration a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:RecordingGroup ;
-                    d2rq:property sb:orchestration ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_recording_group_recording_group.link_type =316 " ;
-                    d2rq:alias "recording_group as rg12";
-                    d2rq:join "recording_group.recording_group=> rel_recording_group_recording_group.recording_group" ;
-                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg12.recording_group" .
-
-
-map:rel_recording_group_recording_group_karaoke a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:RecordingGroup ;
-                    d2rq:property sb:karaoke ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_recording_group_recording_group.link_type =226 " ;
-                    d2rq:alias "recording_group as rg13";
-                    d2rq:join "recording_group.recording_group=> rel_recording_group_recording_group.recording_group" ;
-                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg13.recording_group" .
-
-
-map:rel_recording_group_recording_group_parts a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:RecordingGroup ;
-                    d2rq:property sb:parts ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_recording_group_recording_group.link_type =281 " ;
-                    d2rq:alias "recording_group as rg14";
-                    d2rq:join "recording_group.recording_group=> rel_recording_group_recording_group.recording_group" ;
-                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg14.recording_group" .
-
-
-map:rel_recording_group_recording_group_edit a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:RecordingGroup ;
-                    d2rq:property sb:edit ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_recording_group_recording_group.link_type =309 " ;
-                    d2rq:alias "recording_group as rg15";
-                    d2rq:join "recording_group.recording_group=> rel_recording_group_recording_group.recording_group" ;
-                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg15.recording_group" .
-
-
-map:rel_recording_group_recording_group_other_version a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:RecordingGroup ;
-                    d2rq:property sb:other_version ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_recording_group_recording_group.link_type =241 " ;
-                    d2rq:alias "recording_group as rg16";
-                    d2rq:join "recording_group.recording_group=> rel_recording_group_recording_group.recording_group" ;
-                    d2rq:join "rel_recording_group_recording_group.recording_group2 => rg16.recording_group" .
+                    d2rq:condition "simplebrainz.rel_artist_place.link_type =704 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_place.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_place.place_id => musicbrainz.place.id" .
 
 
 map:rel_artist_artist_married a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:married ;
                     d2rq:refersToClassMap map:Artist ;
-                    d2rq:condition "rel_artist_artist.link_type =111 " ;
-                    d2rq:alias "musicbrainz.artist as rg17";
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_artist.artist" ;
-                    d2rq:join "rel_artist_artist.artist2 => rg17.id" .
+                    d2rq:condition "simplebrainz.rel_artist_artist.link_type =111 " ;
+                    d2rq:alias "musicbrainz.artist as rg0";
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_artist.artist" ;
+                    d2rq:join "simplebrainz.rel_artist_artist.artist2 => rg0.id" .
 
 
 map:rel_artist_artist_voice_actor a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:voice_actor ;
                     d2rq:refersToClassMap map:Artist ;
-                    d2rq:condition "rel_artist_artist.link_type =292 " ;
-                    d2rq:alias "musicbrainz.artist as rg18";
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_artist.artist" ;
-                    d2rq:join "rel_artist_artist.artist2 => rg18.id" .
+                    d2rq:condition "simplebrainz.rel_artist_artist.link_type =292 " ;
+                    d2rq:alias "musicbrainz.artist as rg1";
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_artist.artist" ;
+                    d2rq:join "simplebrainz.rel_artist_artist.artist2 => rg1.id" .
 
 
 map:rel_artist_artist_composer-in-residence a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:composer-in-residence ;
                     d2rq:refersToClassMap map:Artist ;
-                    d2rq:condition "rel_artist_artist.link_type =855 " ;
-                    d2rq:alias "musicbrainz.artist as rg19";
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_artist.artist" ;
-                    d2rq:join "rel_artist_artist.artist2 => rg19.id" .
+                    d2rq:condition "simplebrainz.rel_artist_artist.link_type =855 " ;
+                    d2rq:alias "musicbrainz.artist as rg2";
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_artist.artist" ;
+                    d2rq:join "simplebrainz.rel_artist_artist.artist2 => rg2.id" .
 
 
 map:rel_artist_artist_instrumental_supporting_musician a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:instrumental_supporting_musician ;
                     d2rq:refersToClassMap map:Artist ;
-                    d2rq:condition "rel_artist_artist.link_type =105 " ;
-                    d2rq:alias "musicbrainz.artist as rg20";
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_artist.artist" ;
-                    d2rq:join "rel_artist_artist.artist2 => rg20.id" .
+                    d2rq:condition "simplebrainz.rel_artist_artist.link_type =105 " ;
+                    d2rq:alias "musicbrainz.artist as rg3";
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_artist.artist" ;
+                    d2rq:join "simplebrainz.rel_artist_artist.artist2 => rg3.id" .
 
 
 map:rel_artist_artist_vocal_supporting_musician a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:vocal_supporting_musician ;
                     d2rq:refersToClassMap map:Artist ;
-                    d2rq:condition "rel_artist_artist.link_type =107 " ;
-                    d2rq:alias "musicbrainz.artist as rg21";
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_artist.artist" ;
-                    d2rq:join "rel_artist_artist.artist2 => rg21.id" .
+                    d2rq:condition "simplebrainz.rel_artist_artist.link_type =107 " ;
+                    d2rq:alias "musicbrainz.artist as rg4";
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_artist.artist" ;
+                    d2rq:join "simplebrainz.rel_artist_artist.artist2 => rg4.id" .
 
 
 map:rel_artist_artist_parent a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:parent ;
                     d2rq:refersToClassMap map:Artist ;
-                    d2rq:condition "rel_artist_artist.link_type =109 " ;
-                    d2rq:alias "musicbrainz.artist as rg22";
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_artist.artist" ;
-                    d2rq:join "rel_artist_artist.artist2 => rg22.id" .
+                    d2rq:condition "simplebrainz.rel_artist_artist.link_type =109 " ;
+                    d2rq:alias "musicbrainz.artist as rg5";
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_artist.artist" ;
+                    d2rq:join "simplebrainz.rel_artist_artist.artist2 => rg5.id" .
 
 
 map:rel_artist_artist_member_of_band a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:member_of_band ;
                     d2rq:refersToClassMap map:Artist ;
-                    d2rq:condition "rel_artist_artist.link_type =103 " ;
-                    d2rq:alias "musicbrainz.artist as rg23";
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_artist.artist" ;
-                    d2rq:join "rel_artist_artist.artist2 => rg23.id" .
+                    d2rq:condition "simplebrainz.rel_artist_artist.link_type =103 " ;
+                    d2rq:alias "musicbrainz.artist as rg6";
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_artist.artist" ;
+                    d2rq:join "simplebrainz.rel_artist_artist.artist2 => rg6.id" .
 
 
 map:rel_artist_artist_collaboration a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:collaboration ;
                     d2rq:refersToClassMap map:Artist ;
-                    d2rq:condition "rel_artist_artist.link_type =102 " ;
-                    d2rq:alias "musicbrainz.artist as rg24";
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_artist.artist" ;
-                    d2rq:join "rel_artist_artist.artist2 => rg24.id" .
+                    d2rq:condition "simplebrainz.rel_artist_artist.link_type =102 " ;
+                    d2rq:alias "musicbrainz.artist as rg7";
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_artist.artist" ;
+                    d2rq:join "simplebrainz.rel_artist_artist.artist2 => rg7.id" .
 
 
 map:rel_artist_artist_tribute a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:tribute ;
                     d2rq:refersToClassMap map:Artist ;
-                    d2rq:condition "rel_artist_artist.link_type =728 " ;
-                    d2rq:alias "musicbrainz.artist as rg25";
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_artist.artist" ;
-                    d2rq:join "rel_artist_artist.artist2 => rg25.id" .
+                    d2rq:condition "simplebrainz.rel_artist_artist.link_type =728 " ;
+                    d2rq:alias "musicbrainz.artist as rg8";
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_artist.artist" ;
+                    d2rq:join "simplebrainz.rel_artist_artist.artist2 => rg8.id" .
 
 
 map:rel_artist_artist_involved_with a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:involved_with ;
                     d2rq:refersToClassMap map:Artist ;
-                    d2rq:condition "rel_artist_artist.link_type =112 " ;
-                    d2rq:alias "musicbrainz.artist as rg26";
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_artist.artist" ;
-                    d2rq:join "rel_artist_artist.artist2 => rg26.id" .
+                    d2rq:condition "simplebrainz.rel_artist_artist.link_type =112 " ;
+                    d2rq:alias "musicbrainz.artist as rg9";
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_artist.artist" ;
+                    d2rq:join "simplebrainz.rel_artist_artist.artist2 => rg9.id" .
 
 
 map:rel_artist_artist_conductor_position a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:conductor_position ;
                     d2rq:refersToClassMap map:Artist ;
-                    d2rq:condition "rel_artist_artist.link_type =305 " ;
-                    d2rq:alias "musicbrainz.artist as rg27";
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_artist.artist" ;
-                    d2rq:join "rel_artist_artist.artist2 => rg27.id" .
+                    d2rq:condition "simplebrainz.rel_artist_artist.link_type =305 " ;
+                    d2rq:alias "musicbrainz.artist as rg10";
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_artist.artist" ;
+                    d2rq:join "simplebrainz.rel_artist_artist.artist2 => rg10.id" .
 
 
 map:rel_artist_artist_supporting_musician a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:supporting_musician ;
                     d2rq:refersToClassMap map:Artist ;
-                    d2rq:condition "rel_artist_artist.link_type =104 " ;
-                    d2rq:alias "musicbrainz.artist as rg28";
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_artist.artist" ;
-                    d2rq:join "rel_artist_artist.artist2 => rg28.id" .
+                    d2rq:condition "simplebrainz.rel_artist_artist.link_type =104 " ;
+                    d2rq:alias "musicbrainz.artist as rg11";
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_artist.artist" ;
+                    d2rq:join "simplebrainz.rel_artist_artist.artist2 => rg11.id" .
 
 
 map:rel_artist_artist_teacher a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:teacher ;
                     d2rq:refersToClassMap map:Artist ;
-                    d2rq:condition "rel_artist_artist.link_type =847 " ;
-                    d2rq:alias "musicbrainz.artist as rg29";
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_artist.artist" ;
-                    d2rq:join "rel_artist_artist.artist2 => rg29.id" .
+                    d2rq:condition "simplebrainz.rel_artist_artist.link_type =847 " ;
+                    d2rq:alias "musicbrainz.artist as rg12";
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_artist.artist" ;
+                    d2rq:join "simplebrainz.rel_artist_artist.artist2 => rg12.id" .
 
 
 map:rel_artist_artist_sibling a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:sibling ;
                     d2rq:refersToClassMap map:Artist ;
-                    d2rq:condition "rel_artist_artist.link_type =110 " ;
-                    d2rq:alias "musicbrainz.artist as rg30";
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_artist.artist" ;
-                    d2rq:join "rel_artist_artist.artist2 => rg30.id" .
+                    d2rq:condition "simplebrainz.rel_artist_artist.link_type =110 " ;
+                    d2rq:alias "musicbrainz.artist as rg13";
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_artist.artist" ;
+                    d2rq:join "simplebrainz.rel_artist_artist.artist2 => rg13.id" .
 
 
 map:rel_artist_artist_subgroup a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:subgroup ;
                     d2rq:refersToClassMap map:Artist ;
-                    d2rq:condition "rel_artist_artist.link_type =722 " ;
-                    d2rq:alias "musicbrainz.artist as rg31";
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_artist.artist" ;
-                    d2rq:join "rel_artist_artist.artist2 => rg31.id" .
+                    d2rq:condition "simplebrainz.rel_artist_artist.link_type =722 " ;
+                    d2rq:alias "musicbrainz.artist as rg14";
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_artist.artist" ;
+                    d2rq:join "simplebrainz.rel_artist_artist.artist2 => rg14.id" .
 
 
 map:rel_artist_artist_founder a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:founder ;
                     d2rq:refersToClassMap map:Artist ;
-                    d2rq:condition "rel_artist_artist.link_type =895 " ;
-                    d2rq:alias "musicbrainz.artist as rg32";
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_artist.artist" ;
-                    d2rq:join "rel_artist_artist.artist2 => rg32.id" .
+                    d2rq:condition "simplebrainz.rel_artist_artist.link_type =895 " ;
+                    d2rq:alias "musicbrainz.artist as rg15";
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_artist.artist" ;
+                    d2rq:join "simplebrainz.rel_artist_artist.artist2 => rg15.id" .
 
 
 map:rel_artist_artist_is_person a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:is_person ;
                     d2rq:refersToClassMap map:Artist ;
-                    d2rq:condition "rel_artist_artist.link_type =108 " ;
-                    d2rq:alias "musicbrainz.artist as rg33";
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_artist.artist" ;
-                    d2rq:join "rel_artist_artist.artist2 => rg33.id" .
+                    d2rq:condition "simplebrainz.rel_artist_artist.link_type =108 " ;
+                    d2rq:alias "musicbrainz.artist as rg16";
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_artist.artist" ;
+                    d2rq:join "simplebrainz.rel_artist_artist.artist2 => rg16.id" .
 
 
 map:rel_release_group_release_group_part_of_set a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:ReleaseGroup ;
                     d2rq:property sb:part_of_set ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_release_group_release_group.link_type =1 " ;
-                    d2rq:alias "musicbrainz.release_group as rg34";
-                    d2rq:join "musicbrainz.release_group.gid=> rel_release_group_release_group.release_group" ;
-                    d2rq:join "rel_release_group_release_group.release_group2 => rg34.gid" .
+                    d2rq:condition "simplebrainz.rel_release_group_release_group.link_type =1 " ;
+                    d2rq:alias "musicbrainz.release_group as rg17";
+                    d2rq:join "musicbrainz.release_group.gid=> simplebrainz.rel_release_group_release_group.release_group" ;
+                    d2rq:join "simplebrainz.rel_release_group_release_group.release_group2 => rg17.gid" .
 
 
 map:rel_release_group_release_group_remaster a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:ReleaseGroup ;
                     d2rq:property sb:remaster ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_release_group_release_group.link_type =6 " ;
-                    d2rq:alias "musicbrainz.release_group as rg35";
-                    d2rq:join "musicbrainz.release_group.gid=> rel_release_group_release_group.release_group" ;
-                    d2rq:join "rel_release_group_release_group.release_group2 => rg35.gid" .
+                    d2rq:condition "simplebrainz.rel_release_group_release_group.link_type =6 " ;
+                    d2rq:alias "musicbrainz.release_group as rg18";
+                    d2rq:join "musicbrainz.release_group.gid=> simplebrainz.rel_release_group_release_group.release_group" ;
+                    d2rq:join "simplebrainz.rel_release_group_release_group.release_group2 => rg18.gid" .
 
 
 map:rel_release_group_release_group_supporting_release a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:ReleaseGroup ;
                     d2rq:property sb:supporting_release ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_release_group_release_group.link_type =3 " ;
-                    d2rq:alias "musicbrainz.release_group as rg36";
-                    d2rq:join "musicbrainz.release_group.gid=> rel_release_group_release_group.release_group" ;
-                    d2rq:join "rel_release_group_release_group.release_group2 => rg36.gid" .
+                    d2rq:condition "simplebrainz.rel_release_group_release_group.link_type =3 " ;
+                    d2rq:alias "musicbrainz.release_group as rg19";
+                    d2rq:join "musicbrainz.release_group.gid=> simplebrainz.rel_release_group_release_group.release_group" ;
+                    d2rq:join "simplebrainz.rel_release_group_release_group.release_group2 => rg19.gid" .
 
 
 map:rel_release_group_release_group_transl-tracklisting a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:ReleaseGroup ;
                     d2rq:property sb:transl-tracklisting ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_release_group_release_group.link_type =2 " ;
-                    d2rq:alias "musicbrainz.release_group as rg37";
-                    d2rq:join "musicbrainz.release_group.gid=> rel_release_group_release_group.release_group" ;
-                    d2rq:join "rel_release_group_release_group.release_group2 => rg37.gid" .
-
-
-map:rel_area_recording_group_recorded_in a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Area ;
-                    d2rq:property sb:recorded_in ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_area_recording_group.link_type =698 " ;
-                    d2rq:join "musicbrainz.area.id=> rel_area_recording_group.area_id" ;
-                    d2rq:join "rel_area_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_area_recording_group_engineered_in a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Area ;
-                    d2rq:property sb:engineered_in ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_area_recording_group.link_type =814 " ;
-                    d2rq:join "musicbrainz.area.id=> rel_area_recording_group.area_id" ;
-                    d2rq:join "rel_area_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_area_recording_group_revised_in a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Area ;
-                    d2rq:property sb:revised_in ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_area_recording_group.link_type =881 " ;
-                    d2rq:join "musicbrainz.area.id=> rel_area_recording_group.area_id" ;
-                    d2rq:join "rel_area_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_area_recording_group_remixed_in a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Area ;
-                    d2rq:property sb:remixed_in ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_area_recording_group.link_type =830 " ;
-                    d2rq:join "musicbrainz.area.id=> rel_area_recording_group.area_id" ;
-                    d2rq:join "rel_area_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_area_recording_group_edited_in a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Area ;
-                    d2rq:property sb:edited_in ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_area_recording_group.link_type =821 " ;
-                    d2rq:join "musicbrainz.area.id=> rel_area_recording_group.area_id" ;
-                    d2rq:join "rel_area_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_area_recording_group_mixed_in a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Area ;
-                    d2rq:property sb:mixed_in ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_area_recording_group.link_type =758 " ;
-                    d2rq:join "musicbrainz.area.id=> rel_area_recording_group.area_id" ;
-                    d2rq:join "rel_area_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_area_recording_group_produced_in a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Area ;
-                    d2rq:property sb:produced_in ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_area_recording_group.link_type =827 " ;
-                    d2rq:join "musicbrainz.area.id=> rel_area_recording_group.area_id" ;
-                    d2rq:join "rel_area_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_area_recording_group_arranged_in a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Area ;
-                    d2rq:property sb:arranged_in ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_area_recording_group.link_type =885 " ;
-                    d2rq:join "musicbrainz.area.id=> rel_area_recording_group.area_id" ;
-                    d2rq:join "rel_area_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_area_recording_group_premiere a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Area ;
-                    d2rq:property sb:premiere ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_area_recording_group.link_type =715 " ;
-                    d2rq:join "musicbrainz.area.id=> rel_area_recording_group.area_id" ;
-                    d2rq:join "rel_area_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_area_recording_group_composed_in a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Area ;
-                    d2rq:property sb:composed_in ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_area_recording_group.link_type =875 " ;
-                    d2rq:join "musicbrainz.area.id=> rel_area_recording_group.area_id" ;
-                    d2rq:join "rel_area_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_area_recording_group_written_in a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Area ;
-                    d2rq:property sb:written_in ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_area_recording_group.link_type =873 " ;
-                    d2rq:join "musicbrainz.area.id=> rel_area_recording_group.area_id" ;
-                    d2rq:join "rel_area_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_area_recording_group_anthem a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Area ;
-                    d2rq:property sb:anthem ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_area_recording_group.link_type =357 " ;
-                    d2rq:join "musicbrainz.area.id=> rel_area_recording_group.area_id" ;
-                    d2rq:join "rel_area_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_area_recording_group_lyrics_written_in a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Area ;
-                    d2rq:property sb:lyrics_written_in ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_area_recording_group.link_type =877 " ;
-                    d2rq:join "musicbrainz.area.id=> rel_area_recording_group.area_id" ;
-                    d2rq:join "rel_area_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_area_recording_group_arranged_in a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Area ;
-                    d2rq:property sb:arranged_in ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_area_recording_group.link_type =864 " ;
-                    d2rq:join "musicbrainz.area.id=> rel_area_recording_group.area_id" ;
-                    d2rq:join "rel_area_recording_group.recording_group => recording_group.recording_group" .
+                    d2rq:condition "simplebrainz.rel_release_group_release_group.link_type =2 " ;
+                    d2rq:alias "musicbrainz.release_group as rg20";
+                    d2rq:join "musicbrainz.release_group.gid=> simplebrainz.rel_release_group_release_group.release_group" ;
+                    d2rq:join "simplebrainz.rel_release_group_release_group.release_group2 => rg20.gid" .
 
 
 map:rel_area_release_group_mastered_in a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Area ;
                     d2rq:property sb:mastered_in ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_area_release_group.link_type =756 " ;
-                    d2rq:join "musicbrainz.area.id=> rel_area_release_group.area_id" ;
-                    d2rq:join "rel_area_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_area_release_group.link_type =756 " ;
+                    d2rq:join "musicbrainz.area.id=> simplebrainz.rel_area_release_group.area_id" ;
+                    d2rq:join "simplebrainz.rel_area_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_area_release_group_produced_in a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Area ;
                     d2rq:property sb:produced_in ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_area_release_group.link_type =826 " ;
-                    d2rq:join "musicbrainz.area.id=> rel_area_release_group.area_id" ;
-                    d2rq:join "rel_area_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_area_release_group.link_type =826 " ;
+                    d2rq:join "musicbrainz.area.id=> simplebrainz.rel_area_release_group.area_id" ;
+                    d2rq:join "simplebrainz.rel_area_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_area_release_group_recorded_in a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Area ;
                     d2rq:property sb:recorded_in ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_area_release_group.link_type =699 " ;
-                    d2rq:join "musicbrainz.area.id=> rel_area_release_group.area_id" ;
-                    d2rq:join "rel_area_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_area_release_group.link_type =699 " ;
+                    d2rq:join "musicbrainz.area.id=> simplebrainz.rel_area_release_group.area_id" ;
+                    d2rq:join "simplebrainz.rel_area_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_area_release_group_printed_in a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Area ;
                     d2rq:property sb:printed_in ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_area_release_group.link_type =849 " ;
-                    d2rq:join "musicbrainz.area.id=> rel_area_release_group.area_id" ;
-                    d2rq:join "rel_area_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_area_release_group.link_type =849 " ;
+                    d2rq:join "musicbrainz.area.id=> simplebrainz.rel_area_release_group.area_id" ;
+                    d2rq:join "simplebrainz.rel_area_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_area_release_group_mixed_in a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Area ;
                     d2rq:property sb:mixed_in ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_area_release_group.link_type =757 " ;
-                    d2rq:join "musicbrainz.area.id=> rel_area_release_group.area_id" ;
-                    d2rq:join "rel_area_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_area_release_group.link_type =757 " ;
+                    d2rq:join "musicbrainz.area.id=> simplebrainz.rel_area_release_group.area_id" ;
+                    d2rq:join "simplebrainz.rel_area_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_area_release_group_manufactured_in a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Area ;
                     d2rq:property sb:manufactured_in ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_area_release_group.link_type =835 " ;
-                    d2rq:join "musicbrainz.area.id=> rel_area_release_group.area_id" ;
-                    d2rq:join "rel_area_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_area_release_group.link_type =835 " ;
+                    d2rq:join "musicbrainz.area.id=> simplebrainz.rel_area_release_group.area_id" ;
+                    d2rq:join "simplebrainz.rel_area_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_area_release_group_engineered_in a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Area ;
                     d2rq:property sb:engineered_in ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_area_release_group.link_type =815 " ;
-                    d2rq:join "musicbrainz.area.id=> rel_area_release_group.area_id" ;
-                    d2rq:join "rel_area_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_area_release_group.link_type =815 " ;
+                    d2rq:join "musicbrainz.area.id=> simplebrainz.rel_area_release_group.area_id" ;
+                    d2rq:join "simplebrainz.rel_area_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_area_release_group_edited_in a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Area ;
                     d2rq:property sb:edited_in ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_area_release_group.link_type =822 " ;
-                    d2rq:join "musicbrainz.area.id=> rel_area_release_group.area_id" ;
-                    d2rq:join "rel_area_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_area_release_group.link_type =822 " ;
+                    d2rq:join "musicbrainz.area.id=> simplebrainz.rel_area_release_group.area_id" ;
+                    d2rq:join "simplebrainz.rel_area_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_area_area_part_of a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Area ;
                     d2rq:property sb:part_of ;
                     d2rq:refersToClassMap map:Area ;
-                    d2rq:condition "rel_area_area.link_type =356 " ;
-                    d2rq:alias "musicbrainz.area as rg38";
-                    d2rq:join "musicbrainz.area.id=> rel_area_area.area_id" ;
-                    d2rq:join "rel_area_area.area_id2 => rg38.id" .
-
-
-map:rel_place_recording_group_recorded_at a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Place ;
-                    d2rq:property sb:recorded_at ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_place_recording_group.link_type =693 " ;
-                    d2rq:join "musicbrainz.place.id=> rel_place_recording_group.place_id" ;
-                    d2rq:join "rel_place_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_place_recording_group_commissioned a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Place ;
-                    d2rq:property sb:commissioned ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_place_recording_group.link_type =892 " ;
-                    d2rq:join "musicbrainz.place.id=> rel_place_recording_group.place_id" ;
-                    d2rq:join "rel_place_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_place_recording_group_composed_at a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Place ;
-                    d2rq:property sb:composed_at ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_place_recording_group.link_type =876 " ;
-                    d2rq:join "musicbrainz.place.id=> rel_place_recording_group.place_id" ;
-                    d2rq:join "rel_place_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_place_recording_group_edited_at a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Place ;
-                    d2rq:property sb:edited_at ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_place_recording_group.link_type =819 " ;
-                    d2rq:join "musicbrainz.place.id=> rel_place_recording_group.place_id" ;
-                    d2rq:join "rel_place_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_place_recording_group_mixed_at a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Place ;
-                    d2rq:property sb:mixed_at ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_place_recording_group.link_type =694 " ;
-                    d2rq:join "musicbrainz.place.id=> rel_place_recording_group.place_id" ;
-                    d2rq:join "rel_place_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_place_recording_group_remixed_at a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Place ;
-                    d2rq:property sb:remixed_at ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_place_recording_group.link_type =829 " ;
-                    d2rq:join "musicbrainz.place.id=> rel_place_recording_group.place_id" ;
-                    d2rq:join "rel_place_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_place_recording_group_written_at a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Place ;
-                    d2rq:property sb:written_at ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_place_recording_group.link_type =874 " ;
-                    d2rq:join "musicbrainz.place.id=> rel_place_recording_group.place_id" ;
-                    d2rq:join "rel_place_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_place_recording_group_engineered_at a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Place ;
-                    d2rq:property sb:engineered_at ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_place_recording_group.link_type =813 " ;
-                    d2rq:join "musicbrainz.place.id=> rel_place_recording_group.place_id" ;
-                    d2rq:join "rel_place_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_place_recording_group_premiere a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Place ;
-                    d2rq:property sb:premiere ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_place_recording_group.link_type =716 " ;
-                    d2rq:join "musicbrainz.place.id=> rel_place_recording_group.place_id" ;
-                    d2rq:join "rel_place_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_place_recording_group_arranged_at a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Place ;
-                    d2rq:property sb:arranged_at ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_place_recording_group.link_type =886 " ;
-                    d2rq:join "musicbrainz.place.id=> rel_place_recording_group.place_id" ;
-                    d2rq:join "rel_place_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_place_recording_group_lyrics_written_at a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Place ;
-                    d2rq:property sb:lyrics_written_at ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_place_recording_group.link_type =878 " ;
-                    d2rq:join "musicbrainz.place.id=> rel_place_recording_group.place_id" ;
-                    d2rq:join "rel_place_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_place_recording_group_produced_at a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Place ;
-                    d2rq:property sb:produced_at ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_place_recording_group.link_type =825 " ;
-                    d2rq:join "musicbrainz.place.id=> rel_place_recording_group.place_id" ;
-                    d2rq:join "rel_place_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_place_recording_group_arranged_at a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Place ;
-                    d2rq:property sb:arranged_at ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_place_recording_group.link_type =866 " ;
-                    d2rq:join "musicbrainz.place.id=> rel_place_recording_group.place_id" ;
-                    d2rq:join "rel_place_recording_group.recording_group => recording_group.recording_group" .
+                    d2rq:condition "simplebrainz.rel_area_area.link_type =356 " ;
+                    d2rq:alias "musicbrainz.area as rg21";
+                    d2rq:join "musicbrainz.area.id=> simplebrainz.rel_area_area.area_id" ;
+                    d2rq:join "simplebrainz.rel_area_area.area_id2 => rg21.id" .
 
 
 map:rel_place_release_group_arranged_at a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Place ;
                     d2rq:property sb:arranged_at ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_place_release_group.link_type =865 " ;
-                    d2rq:join "musicbrainz.place.id=> rel_place_release_group.place_id" ;
-                    d2rq:join "rel_place_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_place_release_group.link_type =865 " ;
+                    d2rq:join "musicbrainz.place.id=> simplebrainz.rel_place_release_group.place_id" ;
+                    d2rq:join "simplebrainz.rel_place_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_place_release_group_mastered_at a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Place ;
                     d2rq:property sb:mastered_at ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_place_release_group.link_type =697 " ;
-                    d2rq:join "musicbrainz.place.id=> rel_place_release_group.place_id" ;
-                    d2rq:join "rel_place_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_place_release_group.link_type =697 " ;
+                    d2rq:join "musicbrainz.place.id=> simplebrainz.rel_place_release_group.place_id" ;
+                    d2rq:join "simplebrainz.rel_place_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_place_release_group_edited_at a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Place ;
                     d2rq:property sb:edited_at ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_place_release_group.link_type =820 " ;
-                    d2rq:join "musicbrainz.place.id=> rel_place_release_group.place_id" ;
-                    d2rq:join "rel_place_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_place_release_group.link_type =820 " ;
+                    d2rq:join "musicbrainz.place.id=> simplebrainz.rel_place_release_group.place_id" ;
+                    d2rq:join "simplebrainz.rel_place_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_place_release_group_engineered_at a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Place ;
                     d2rq:property sb:engineered_at ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_place_release_group.link_type =812 " ;
-                    d2rq:join "musicbrainz.place.id=> rel_place_release_group.place_id" ;
-                    d2rq:join "rel_place_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_place_release_group.link_type =812 " ;
+                    d2rq:join "musicbrainz.place.id=> simplebrainz.rel_place_release_group.place_id" ;
+                    d2rq:join "simplebrainz.rel_place_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_place_release_group_produced_at a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Place ;
                     d2rq:property sb:produced_at ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_place_release_group.link_type =824 " ;
-                    d2rq:join "musicbrainz.place.id=> rel_place_release_group.place_id" ;
-                    d2rq:join "rel_place_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_place_release_group.link_type =824 " ;
+                    d2rq:join "musicbrainz.place.id=> simplebrainz.rel_place_release_group.place_id" ;
+                    d2rq:join "simplebrainz.rel_place_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_place_release_group_remixed_at a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Place ;
                     d2rq:property sb:remixed_at ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_place_release_group.link_type =828 " ;
-                    d2rq:join "musicbrainz.place.id=> rel_place_release_group.place_id" ;
-                    d2rq:join "rel_place_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_place_release_group.link_type =828 " ;
+                    d2rq:join "musicbrainz.place.id=> simplebrainz.rel_place_release_group.place_id" ;
+                    d2rq:join "simplebrainz.rel_place_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_place_release_group_recorded_at a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Place ;
                     d2rq:property sb:recorded_at ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_place_release_group.link_type =695 " ;
-                    d2rq:join "musicbrainz.place.id=> rel_place_release_group.place_id" ;
-                    d2rq:join "rel_place_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_place_release_group.link_type =695 " ;
+                    d2rq:join "musicbrainz.place.id=> simplebrainz.rel_place_release_group.place_id" ;
+                    d2rq:join "simplebrainz.rel_place_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_place_release_group_mixed_at a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Place ;
                     d2rq:property sb:mixed_at ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_place_release_group.link_type =696 " ;
-                    d2rq:join "musicbrainz.place.id=> rel_place_release_group.place_id" ;
-                    d2rq:join "rel_place_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_place_release_group.link_type =696 " ;
+                    d2rq:join "musicbrainz.place.id=> simplebrainz.rel_place_release_group.place_id" ;
+                    d2rq:join "simplebrainz.rel_place_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_place_place_parts a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Place ;
                     d2rq:property sb:parts ;
                     d2rq:refersToClassMap map:Place ;
-                    d2rq:condition "rel_place_place.link_type =717 " ;
-                    d2rq:alias "musicbrainz.place as rg39";
-                    d2rq:join "musicbrainz.place.id=> rel_place_place.place_id" ;
-                    d2rq:join "rel_place_place.place_id2 => rg39.id" .
+                    d2rq:condition "simplebrainz.rel_place_place.link_type =717 " ;
+                    d2rq:alias "musicbrainz.place as rg22";
+                    d2rq:join "musicbrainz.place.id=> simplebrainz.rel_place_place.place_id" ;
+                    d2rq:join "simplebrainz.rel_place_place.place_id2 => rg22.id" .
 
 
 map:rel_label_label_label_rename a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Label ;
                     d2rq:property sb:label_rename ;
                     d2rq:refersToClassMap map:Label ;
-                    d2rq:condition "rel_label_label.link_type =202 " ;
-                    d2rq:alias "musicbrainz.label as rg40";
-                    d2rq:join "musicbrainz.label.id=> rel_label_label.label_id" ;
-                    d2rq:join "rel_label_label.label_id2 => rg40.id" .
+                    d2rq:condition "simplebrainz.rel_label_label.link_type =202 " ;
+                    d2rq:alias "musicbrainz.label as rg23";
+                    d2rq:join "musicbrainz.label.id=> simplebrainz.rel_label_label.label_id" ;
+                    d2rq:join "simplebrainz.rel_label_label.label_id2 => rg23.id" .
 
 
 map:rel_label_label_label_reissue a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Label ;
                     d2rq:property sb:label_reissue ;
                     d2rq:refersToClassMap map:Label ;
-                    d2rq:condition "rel_label_label.link_type =201 " ;
-                    d2rq:alias "musicbrainz.label as rg41";
-                    d2rq:join "musicbrainz.label.id=> rel_label_label.label_id" ;
-                    d2rq:join "rel_label_label.label_id2 => rg41.id" .
+                    d2rq:condition "simplebrainz.rel_label_label.link_type =201 " ;
+                    d2rq:alias "musicbrainz.label as rg24";
+                    d2rq:join "musicbrainz.label.id=> simplebrainz.rel_label_label.label_id" ;
+                    d2rq:join "simplebrainz.rel_label_label.label_id2 => rg24.id" .
 
 
 map:rel_label_label_imprint a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Label ;
                     d2rq:property sb:imprint ;
                     d2rq:refersToClassMap map:Label ;
-                    d2rq:condition "rel_label_label.link_type =725 " ;
-                    d2rq:alias "musicbrainz.label as rg42";
-                    d2rq:join "musicbrainz.label.id=> rel_label_label.label_id" ;
-                    d2rq:join "rel_label_label.label_id2 => rg42.id" .
+                    d2rq:condition "simplebrainz.rel_label_label.link_type =725 " ;
+                    d2rq:alias "musicbrainz.label as rg25";
+                    d2rq:join "musicbrainz.label.id=> simplebrainz.rel_label_label.label_id" ;
+                    d2rq:join "simplebrainz.rel_label_label.label_id2 => rg25.id" .
 
 
 map:rel_label_label_label_distribution a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Label ;
                     d2rq:property sb:label_distribution ;
                     d2rq:refersToClassMap map:Label ;
-                    d2rq:condition "rel_label_label.link_type =203 " ;
-                    d2rq:alias "musicbrainz.label as rg43";
-                    d2rq:join "musicbrainz.label.id=> rel_label_label.label_id" ;
-                    d2rq:join "rel_label_label.label_id2 => rg43.id" .
+                    d2rq:condition "simplebrainz.rel_label_label.link_type =203 " ;
+                    d2rq:alias "musicbrainz.label as rg26";
+                    d2rq:join "musicbrainz.label.id=> simplebrainz.rel_label_label.label_id" ;
+                    d2rq:join "simplebrainz.rel_label_label.label_id2 => rg26.id" .
 
 
 map:rel_label_label_label_ownership a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Label ;
                     d2rq:property sb:label_ownership ;
                     d2rq:refersToClassMap map:Label ;
-                    d2rq:condition "rel_label_label.link_type =200 " ;
-                    d2rq:alias "musicbrainz.label as rg44";
-                    d2rq:join "musicbrainz.label.id=> rel_label_label.label_id" ;
-                    d2rq:join "rel_label_label.label_id2 => rg44.id" .
-
-
-map:rel_label_recording_group_phonographic_copyright a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Label ;
-                    d2rq:property sb:phonographic_copyright ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_label_recording_group.link_type =867 " ;
-                    d2rq:join "musicbrainz.label.id=> rel_label_recording_group.label_id" ;
-                    d2rq:join "rel_label_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_label_recording_group_publishing a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Label ;
-                    d2rq:property sb:publishing ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_label_recording_group.link_type =208 " ;
-                    d2rq:join "musicbrainz.label.id=> rel_label_recording_group.label_id" ;
-                    d2rq:join "rel_label_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_label_recording_group_commissioned a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Label ;
-                    d2rq:property sb:commissioned ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_label_recording_group.link_type =890 " ;
-                    d2rq:join "musicbrainz.label.id=> rel_label_recording_group.label_id" ;
-                    d2rq:join "rel_label_recording_group.recording_group => recording_group.recording_group" .
-
-
-map:rel_label_recording_group_publishing a d2rq:PropertyBridge ;
-                    d2rq:belongsToClassMap map:Label ;
-                    d2rq:property sb:publishing ;
-                    d2rq:refersToClassMap map:RecordingGroup ;
-                    d2rq:condition "rel_label_recording_group.link_type =206 " ;
-                    d2rq:join "musicbrainz.label.id=> rel_label_recording_group.label_id" ;
-                    d2rq:join "rel_label_recording_group.recording_group => recording_group.recording_group" .
+                    d2rq:condition "simplebrainz.rel_label_label.link_type =200 " ;
+                    d2rq:alias "musicbrainz.label as rg27";
+                    d2rq:join "musicbrainz.label.id=> simplebrainz.rel_label_label.label_id" ;
+                    d2rq:join "simplebrainz.rel_label_label.label_id2 => rg27.id" .
 
 
 map:rel_label_release_group_copyright a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Label ;
                     d2rq:property sb:copyright ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_label_release_group.link_type =708 " ;
-                    d2rq:join "musicbrainz.label.id=> rel_label_release_group.label_id" ;
-                    d2rq:join "rel_label_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_label_release_group.link_type =708 " ;
+                    d2rq:join "musicbrainz.label.id=> simplebrainz.rel_label_release_group.label_id" ;
+                    d2rq:join "simplebrainz.rel_label_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_label_release_group_published a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Label ;
                     d2rq:property sb:published ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_label_release_group.link_type =362 " ;
-                    d2rq:join "musicbrainz.label.id=> rel_label_release_group.label_id" ;
-                    d2rq:join "rel_label_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_label_release_group.link_type =362 " ;
+                    d2rq:join "musicbrainz.label.id=> simplebrainz.rel_label_release_group.label_id" ;
+                    d2rq:join "simplebrainz.rel_label_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_label_release_group_licensor a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Label ;
                     d2rq:property sb:licensor ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_label_release_group.link_type =712 " ;
-                    d2rq:join "musicbrainz.label.id=> rel_label_release_group.label_id" ;
-                    d2rq:join "rel_label_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_label_release_group.link_type =712 " ;
+                    d2rq:join "musicbrainz.label.id=> simplebrainz.rel_label_release_group.label_id" ;
+                    d2rq:join "simplebrainz.rel_label_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_label_release_group_phonographic_copyright a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Label ;
                     d2rq:property sb:phonographic_copyright ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_label_release_group.link_type =711 " ;
-                    d2rq:join "musicbrainz.label.id=> rel_label_release_group.label_id" ;
-                    d2rq:join "rel_label_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_label_release_group.link_type =711 " ;
+                    d2rq:join "musicbrainz.label.id=> simplebrainz.rel_label_release_group.label_id" ;
+                    d2rq:join "simplebrainz.rel_label_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_label_release_group_distributed a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Label ;
                     d2rq:property sb:distributed ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_label_release_group.link_type =361 " ;
-                    d2rq:join "musicbrainz.label.id=> rel_label_release_group.label_id" ;
-                    d2rq:join "rel_label_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_label_release_group.link_type =361 " ;
+                    d2rq:join "musicbrainz.label.id=> simplebrainz.rel_label_release_group.label_id" ;
+                    d2rq:join "simplebrainz.rel_label_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_label_release_group_marketed a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Label ;
                     d2rq:property sb:marketed ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_label_release_group.link_type =848 " ;
-                    d2rq:join "musicbrainz.label.id=> rel_label_release_group.label_id" ;
-                    d2rq:join "rel_label_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_label_release_group.link_type =848 " ;
+                    d2rq:join "musicbrainz.label.id=> simplebrainz.rel_label_release_group.label_id" ;
+                    d2rq:join "simplebrainz.rel_label_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_label_release_group_rights_society a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Label ;
                     d2rq:property sb:rights_society ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_label_release_group.link_type =349 " ;
-                    d2rq:join "musicbrainz.label.id=> rel_label_release_group.label_id" ;
-                    d2rq:join "rel_label_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_label_release_group.link_type =349 " ;
+                    d2rq:join "musicbrainz.label.id=> simplebrainz.rel_label_release_group.label_id" ;
+                    d2rq:join "simplebrainz.rel_label_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_label_release_group_licensee a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Label ;
                     d2rq:property sb:licensee ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_label_release_group.link_type =833 " ;
-                    d2rq:join "musicbrainz.label.id=> rel_label_release_group.label_id" ;
-                    d2rq:join "rel_label_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_label_release_group.link_type =833 " ;
+                    d2rq:join "musicbrainz.label.id=> simplebrainz.rel_label_release_group.label_id" ;
+                    d2rq:join "simplebrainz.rel_label_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_label_release_group_promoted a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Label ;
                     d2rq:property sb:promoted ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_label_release_group.link_type =359 " ;
-                    d2rq:join "musicbrainz.label.id=> rel_label_release_group.label_id" ;
-                    d2rq:join "rel_label_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_label_release_group.link_type =359 " ;
+                    d2rq:join "musicbrainz.label.id=> simplebrainz.rel_label_release_group.label_id" ;
+                    d2rq:join "simplebrainz.rel_label_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_label_release_group_publishing a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Label ;
                     d2rq:property sb:publishing ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_label_release_group.link_type =66 " ;
-                    d2rq:join "musicbrainz.label.id=> rel_label_release_group.label_id" ;
-                    d2rq:join "rel_label_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_label_release_group.link_type =66 " ;
+                    d2rq:join "musicbrainz.label.id=> simplebrainz.rel_label_release_group.label_id" ;
+                    d2rq:join "simplebrainz.rel_label_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_label_release_group_manufactured a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Label ;
                     d2rq:property sb:manufactured ;
                     d2rq:refersToClassMap map:ReleaseGroup ;
-                    d2rq:condition "rel_label_release_group.link_type =360 " ;
-                    d2rq:join "musicbrainz.label.id=> rel_label_release_group.label_id" ;
-                    d2rq:join "rel_label_release_group.release_group => musicbrainz.release_group.gid" .
+                    d2rq:condition "simplebrainz.rel_label_release_group.link_type =360 " ;
+                    d2rq:join "musicbrainz.label.id=> simplebrainz.rel_label_release_group.label_id" ;
+                    d2rq:join "simplebrainz.rel_label_release_group.release_group => musicbrainz.release_group.gid" .
 
 
 map:rel_artist_label_personal_publisher a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:personal_publisher ;
                     d2rq:refersToClassMap map:Label ;
-                    d2rq:condition "rel_artist_label.link_type =724 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_label.artist_id" ;
-                    d2rq:join "rel_artist_label.label_id => musicbrainz.label.id" .
+                    d2rq:condition "simplebrainz.rel_artist_label.link_type =724 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_label.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_label.label_id => musicbrainz.label.id" .
 
 
 map:rel_artist_label_producer_position a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:producer_position ;
                     d2rq:refersToClassMap map:Label ;
-                    d2rq:condition "rel_artist_label.link_type =117 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_label.artist_id" ;
-                    d2rq:join "rel_artist_label.label_id => musicbrainz.label.id" .
+                    d2rq:condition "simplebrainz.rel_artist_label.link_type =117 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_label.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_label.label_id => musicbrainz.label.id" .
 
 
 map:rel_artist_label_engineer_position a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:engineer_position ;
                     d2rq:refersToClassMap map:Label ;
-                    d2rq:condition "rel_artist_label.link_type =120 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_label.artist_id" ;
-                    d2rq:join "rel_artist_label.label_id => musicbrainz.label.id" .
+                    d2rq:condition "simplebrainz.rel_artist_label.link_type =120 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_label.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_label.label_id => musicbrainz.label.id" .
 
 
 map:rel_artist_label_creative_position a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:creative_position ;
                     d2rq:refersToClassMap map:Label ;
-                    d2rq:condition "rel_artist_label.link_type =115 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_label.artist_id" ;
-                    d2rq:join "rel_artist_label.label_id => musicbrainz.label.id" .
+                    d2rq:condition "simplebrainz.rel_artist_label.link_type =115 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_label.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_label.label_id => musicbrainz.label.id" .
 
 
 map:rel_artist_label_recording_contract a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:recording_contract ;
                     d2rq:refersToClassMap map:Label ;
-                    d2rq:condition "rel_artist_label.link_type =121 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_label.artist_id" ;
-                    d2rq:join "rel_artist_label.label_id => musicbrainz.label.id" .
+                    d2rq:condition "simplebrainz.rel_artist_label.link_type =121 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_label.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_label.label_id => musicbrainz.label.id" .
 
 
 map:rel_artist_label_label_founder a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:label_founder ;
                     d2rq:refersToClassMap map:Label ;
-                    d2rq:condition "rel_artist_label.link_type =116 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_label.artist_id" ;
-                    d2rq:join "rel_artist_label.label_id => musicbrainz.label.id" .
+                    d2rq:condition "simplebrainz.rel_artist_label.link_type =116 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_label.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_label.label_id => musicbrainz.label.id" .
 
 
 map:rel_artist_label_personal_label a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:Artist ;
                     d2rq:property sb:personal_label ;
                     d2rq:refersToClassMap map:Label ;
-                    d2rq:condition "rel_artist_label.link_type =723 " ;
-                    d2rq:join "musicbrainz.artist.id=> rel_artist_label.artist_id" ;
-                    d2rq:join "rel_artist_label.label_id => musicbrainz.label.id" .
+                    d2rq:condition "simplebrainz.rel_artist_label.link_type =723 " ;
+                    d2rq:join "musicbrainz.artist.id=> simplebrainz.rel_artist_label.artist_id" ;
+                    d2rq:join "simplebrainz.rel_artist_label.label_id => musicbrainz.label.id" .
 
