@@ -43,10 +43,10 @@ def load_types():
             more_results = False
             cur.close()
 
-    cur = conn.cursor(name='artists')
+    cur = conn.cursor(name='artists_m')
     cur.itersize = 10000
 
-    cur.execute("select a.gid, a.name from musicbrainz.artist;")
+    cur.execute("select gid, name from musicbrainz.artist;")
     more_results = True
     while more_results:
         record = cur.fetchmany(cur.itersize)
@@ -82,7 +82,7 @@ def load_types():
         if record:
             for alias in record:
                 if alias[0] not in elements_added:
-                    tsv_surface.write('http://musicbrainz.org/recording_group/' + alias[0] + '\t' + alias[1]) + '\n')
+                    tsv_surface.write('http://musicbrainz.org/recording_group/' + alias[0] + '\t' + alias[1] + '\n')
         else:
             more_results = False
             cur.close()
@@ -103,14 +103,14 @@ def load_types():
             cur.close()
     cur = conn.cursor(name='artists')
     cur.itersize = 10000
-    cur.execute("select r.gid, r.name from musicbrainz.release_group ;")
+    cur.execute("select gid, name from musicbrainz.release_group ;")
     more_results = True
     while more_results:
         record = cur.fetchmany(cur.itersize)
         if record:
             for alias in record:
                 if alias[0] not in elements_added:
-                    tsv_surface.write('http://musicbrainz.org/release_group/' + alias[0] + '\t' + alias[3] + '\n')
+                    tsv_surface.write('http://musicbrainz.org/release_group/' + alias[0] + '\t' + alias[1] + '\n')
         else:
             more_results = False
             cur.close()
