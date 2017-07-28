@@ -19,9 +19,9 @@ def load_types():
             type_token = ' '.join(data[2:])
             token = type_token.split("\"^^")
             if '/area/' in uri_token :
-                tsv_area.write(uri_token[1:-3]+"\t"+token[0][1:]+"\n")
+                tsv_area.write(uri_token[1:-1]+"\t"+token[0][1:]+"\n")
             if '/place/' in uri_token :
-                tsv_place.write(uri_token[1:-3]+"\t"+token[0][1:]+"\n")
+                tsv_place.write(uri_token[1:-1]+"\t"+token[0][1:]+"\n")
     tsv_place.close()
     tsv_area.close()
 
