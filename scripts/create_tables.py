@@ -31,14 +31,22 @@ def save_results(conn, cur):
     # Save the results in a new table for groups
     
     # create tables
-    cur.execute("CREATE DATABASE IF NOT EXISTS simplebrainz;")
+    cur.execute("CREATE SCHEMA IF NOT EXISTS simplebrainz;")
     cur.execute("CREATE TABLE IF NOT EXISTS simplebrainz.recording_group_recording(recording_id INTEGER, recording_group UUID, work_id INTEGER );")
     cur.execute("CREATE TABLE IF NOT EXISTS simplebrainz.recording_group_artist(artist INTEGER, recording_group UUID);")
     cur.execute("CREATE TABLE IF NOT EXISTS simplebrainz.recording_group(recording_group UUID, name VARCHAR);")
     
+    insert_works = []
     for work in works.keys():
-        cur.execute( "INSERT INTO simplebrainz.recording_group VALUES (%s, %s);", (work, work_data[work]))
-
+        insert_works.append((work, work_data[work]))
+        if len(insert_works) == 100000:
+            extras.execute_values (
+                cur, "INSERT INTO simplebrainz.recording_group VALUES %s;", insert_works, template=None, page_size=100
+            )
+            insert_works = []
+    extras.execute_values (
+        cur, "INSERT INTO simplebrainz.recording_group VALUES %s;", insert_works, template=None, page_size=100
+    )
     for rec in recordings.keys():
         insert_recs = []
         insert_recs_artists = []
@@ -47,13 +55,22 @@ def save_results(conn, cur):
             if rec in recording_data:
                 for artist in recording_data[rec]['artists']:
                     insert_recs_artists.append((artist, work))
-        extras.execute_values (
-            cur, "INSERT INTO simplebrainz.recording_group_recording VALUES %s;", insert_recs, template=None, page_size=100
-        )
-        extras.execute_values (
-            cur, "INSERT INTO simplebrainz.recording_group_artist VALUES %s;", insert_recs_artists, template=None, page_size=100
-        )
-
+        if len(insert_recs) == 100000:
+            extras.execute_values (
+                cur, "INSERT INTO simplebrainz.recording_group_recording VALUES %s;", insert_recs, template=None, page_size=100
+            )
+            insert_recs = []
+        if len(insert_recs_artists) == 100000:
+            extras.execute_values (
+                cur, "INSERT INTO simplebrainz.recording_group_artist VALUES %s;", insert_recs_artists, template=None, page_size=100
+            )
+            insert_recs_artists = []
+    extras.execute_values (
+        cur, "INSERT INTO simplebrainz.recording_group_recording VALUES %s;", insert_recs, template=None, page_size=100
+    )
+    extras.execute_values (
+        cur, "INSERT INTO simplebrainz.recording_group_artist VALUES %s;", insert_recs_artists, template=None, page_size=100
+    )
 
     conn.commit()
     
@@ -87,7 +104,7 @@ def save_results(conn, cur):
     cur.execute("CREATE TABLE IF NOT EXISTS simplebrainz.rel_place_release_group(place_id INTEGER, release_group UUID, link_type INTEGER, link_label VARCHAR, CONSTRAINT rel_p_rlg_pk PRIMARY KEY (place_id, release_group, link_type));")
     cur.execute("CREATE TABLE IF NOT EXISTS simplebrainz.rel_place_place(place_id INTEGER, place_id2 INTEGER, link_type INTEGER, link_label VARCHAR, CONSTRAINT rel_p_p_pk PRIMARY KEY (place_id, place_id2, link_type));")
     cur.execute("CREATE TABLE IF NOT EXISTS simplebrainz.rel_label_label(label_id INTEGER, label_id2 INTEGER, link_type INTEGER, link_label VARCHAR, CONSTRAINT rel_l_l_pk PRIMARY KEY (label_id, label_id2, link_type));")
-    cur.execute("CREATE TABLE IF NOT EXISTS simplebrainz.rel_label_recording_group(label_id INTEGER, recording_group UUID, link_type INTEGER, link_label VARCHAR, CONSTRAINT rel_l_l_pk PRIMARY KEY (label_id, recording_group, link_type));")
+    cur.execute("CREATE TABLE IF NOT EXISTS simplebrainz.rel_label_recording_group(label_id INTEGER, recording_group UUID, link_type INTEGER, link_label VARCHAR, CONSTRAINT rel_l_r_pk PRIMARY KEY (label_id, recording_group, link_type));")
     cur.execute("CREATE TABLE IF NOT EXISTS simplebrainz.rel_label_release_group(label_id INTEGER, release_group UUID, link_type INTEGER, link_label VARCHAR, CONSTRAINT rel_l_rlg_pk PRIMARY KEY (label_id, release_group, link_type));")
     cur.execute("CREATE TABLE IF NOT EXISTS simplebrainz.rel_artist_label(artist_id INTEGER, label_id INTEGER, link_type INTEGER, link_label VARCHAR, CONSTRAINT rel_a_l_pk PRIMARY KEY (artist_id, label_id, link_type));")
 
@@ -154,7 +171,7 @@ def main():
             work_data[work[0]] = work[2]
 
     # Group all the recordings of the same artist by name, then add all this as groups and merge whith the previous results
-    cur.execute("SELECT acn.artist, lower(r.name), array_agg(r.id) FROM musicbrainz.artist_credit ac, musicbrainz.artist_credit_name acn, musicbrainz.recording r WHERE ac.id = acn.artist_credit AND r.artist_credit = ac.id GROUP BY acn.artist, lower(r.name)")
+    cur.execute("SELECT acn.artist, lower(r.name), array_agg(r.id) FROM musicbrainz.artist_credit ac, musicbrainz.artist_credit_name acn, musicbrainz.recording r WHERE ac.id = acn.artist_credit AND r.artist_credit = ac.id GROUP BY acn.artist, lower(r.name);")
     for group in cur.fetchall():
         work = set()
         for rec in group[2]:

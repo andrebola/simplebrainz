@@ -30,7 +30,7 @@ def load_types():
     tsv_surface = open(dest_path +'surface_forms.tsv', 'w')
     cur = conn.cursor(name='artists')
     cur.itersize = 10000
-
+    elements_added = {}
     cur.execute("select al.artist, a.gid, array_agg(al.name), a.name from musicbrainz.artist_alias al, musicbrainz.artist a where a.id=al.artist group by al.artist, a.gid, a.name;")
     more_results = True
     while more_results:
@@ -38,26 +38,58 @@ def load_types():
         if record:
             for alias in record:
                 tsv_surface.write('http://musicbrainz.org/artist/'+alias[1] + '\t' + '\t'.join(alias[2]) + '\t' + alias[3] + '\n')
+                elements_added[alias[1]] = None
         else:
             more_results = False
             cur.close()
 
     cur = conn.cursor(name='artists')
     cur.itersize = 10000
-    cur.execute("select r.recording_group, array_agg(ra.name), array_agg(DISTINCT(re.name)) from musicbrainz.recording_alias ra, recording_group_recording r, musicbrainz.recording re where r.recording_id=ra.recording AND r.recording_id = re.id group by r.recording_group;")
+
+    cur.execute("select a.gid, a.name from musicbrainz.artist;")
+    more_results = True
+    while more_results:
+        record = cur.fetchmany(cur.itersize)
+        if record:
+            for artist in record:
+                if artist[0] not in elements_added:
+                    tsv_surface.write('http://musicbrainz.org/artist/'+artist[0] + '\t' + alias[1] + '\n')
+        else:
+            more_results = False
+            cur.close()
+
+    cur = conn.cursor(name='artists')
+    cur.itersize = 10000
+    cur.execute("select r.recording_group, array_agg(ra.name), array_agg(DISTINCT(re.name)) from musicbrainz.recording_alias ra, simplebrainz.recording_group_recording r, musicbrainz.recording re where r.recording_id=ra.recording AND r.recording_id = re.id group by r.recording_group;")
     more_results = True
     while more_results:
         record = cur.fetchmany(cur.itersize)
         if record:
             for alias in record:
-                tsv_surface.write('http://musicbrainz.org/recording_group/' + alias[0] + '\t' + '\t'.join(alias[1]) + '\t'.join(alias[2]) + '\n')
+                tsv_surface.write('http://musicbrainz.org/recording_group/' + alias[0] + '\t' + '\t'.join(alias[1]) + '\t' + '\t'.join(alias[2]) + '\n')
+                elements_added[alias[0]] = None
+        else:
+            more_results = False
+            cur.close()
+
+    cur = conn.cursor(name='artists')
+    cur.itersize = 10000
+    elements_added = {}
+    cur.execute("select r.recording_group, r.name from simplebrainz.recording_group r ;")
+    more_results = True
+    while more_results:
+        record = cur.fetchmany(cur.itersize)
+        if record:
+            for alias in record:
+                if alias[0] not in elements_added:
+                    tsv_surface.write('http://musicbrainz.org/recording_group/' + alias[0] + '\t' + alias[1]) + '\n')
         else:
             more_results = False
             cur.close()
     
-    
     cur = conn.cursor(name='artists')
     cur.itersize = 10000
+    elements_added = {}
     cur.execute("select r.id, r.gid, array_agg(ra.name), r.name from musicbrainz.release_alias ra, musicbrainz.release_group r where r.id=ra.release group by r.id;")
     more_results = True
     while more_results:
@@ -65,11 +97,27 @@ def load_types():
         if record:
             for alias in record:
                 tsv_surface.write('http://musicbrainz.org/release_group/' + alias[1] + '\t' + '\t'.join(alias[2]) + '\t' + alias[3] + '\n')
+                elements_added[alias[1]] = None
         else:
             more_results = False
             cur.close()
+    cur = conn.cursor(name='artists')
+    cur.itersize = 10000
+    cur.execute("select r.gid, r.name from musicbrainz.release_group ;")
+    more_results = True
+    while more_results:
+        record = cur.fetchmany(cur.itersize)
+        if record:
+            for alias in record:
+                if alias[0] not in elements_added:
+                    tsv_surface.write('http://musicbrainz.org/release_group/' + alias[0] + '\t' + alias[3] + '\n')
+        else:
+            more_results = False
+            cur.close()
+
     conn.close()
     f.close()
+    
 
 
 if __name__ == "__main__":

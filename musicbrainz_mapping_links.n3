@@ -98,8 +98,8 @@ map:release_group_credit a d2rq:PropertyBridge ;
     d2rq:belongsToClassMap map:ReleaseGroup ;
     d2rq:property foaf:maker ;
     d2rq:refersToClassMap map:Artist ;
-    d2rq:join "musicbrainz.release_group.gid => release_group_artist.release_group" ;
-    d2rq:join "release_group_artist.artist => musicbrainz.artist.id" .
+    d2rq:join "musicbrainz.release_group.gid => simplebrainz.release_group_artist.release_group" ;
+    d2rq:join "simplebrainz.release_group_artist.artist => musicbrainz.artist.id" .
 
 
 ########################################
@@ -108,7 +108,7 @@ map:release_group_credit a d2rq:PropertyBridge ;
 
 map:RecordingGroup a d2rq:ClassMap ;
     d2rq:dataStorage map:database ;
-    d2rq:uriPattern "http://musicbrainz.org/recording_group/@@recording_group.recording_group@@" ;
+    d2rq:uriPattern "http://musicbrainz.org/work/@@simplebrainz.recording_group.recording_group@@" ;
     d2rq:class mo:MusicalWork ;
     d2rq:classDefinitionLabel "MusicalWork"@en .
 
@@ -122,15 +122,15 @@ map:RecordingGroup a d2rq:ClassMap ;
 map:recording_group_name a d2rq:PropertyBridge ;
     d2rq:belongsToClassMap map:RecordingGroup ;
     d2rq:property rdfs:label ;
-    d2rq:column "recording_group.name" ;
+    d2rq:column "simplebrainz.recording_group.name" ;
     d2rq:datatype xsd:string .
 	
 map:recording_group_credit a d2rq:PropertyBridge ;
     d2rq:belongsToClassMap map:RecordingGroup ;
     d2rq:property foaf:maker ;
     d2rq:refersToClassMap map:Artist ;
-    d2rq:join "recording_group.recording_group => recording_group_artist.recording_group" ;
-    d2rq:join "recording_group_artist.artist => musicbrainz.artist.id" .
+    d2rq:join "simplebrainz.recording_group.recording_group => simplebrainz.recording_group_artist.recording_group" ;
+    d2rq:join "simplebrainz.recording_group_artist.artist => musicbrainz.artist.id" .
 
 
 ########################################
