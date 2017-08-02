@@ -70,6 +70,17 @@ map:artist_area a d2rq:PropertyBridge ;
     d2rq:refersToClassMap map:Area ;
     d2rq:join "musicbrainz.artist.area => musicbrainz.area.id".
 
+map:artist_type_person a d2rq:PropertyBridge ;
+    d2rq:belongsToClassMap map:Artist ;
+    d2rq:property rdf:type ;
+    d2rq:condition "musicbrainz.artist.type = 1" ;
+    d2rq:constantValue mo:SoloMusicArtist .
+
+map:artist_type_group a d2rq:PropertyBridge ;
+    d2rq:belongsToClassMap map:Artist ;
+    d2rq:property rdf:type ;
+    d2rq:condition "musicbrainz.artist.type = 2" ;
+    d2rq:constantValue mo:MusicGroup .
 
 ########################################
 # release_group table (mo:SignalGroup) #
@@ -77,7 +88,7 @@ map:artist_area a d2rq:PropertyBridge ;
 
 map:ReleaseGroup a d2rq:ClassMap ;
     d2rq:dataStorage map:database ;
-    d2rq:uriPattern "http://musicbrainz.org/release_group/@@musicbrainz.release_group.gid@@" ;
+    d2rq:uriPattern "http://musicbrainz.org/release-group/@@musicbrainz.release_group.gid@@" ;
     d2rq:class mo:SignalGroup ;
     d2rq:classDefinitionLabel "Signal Group"@en .
 
@@ -100,6 +111,13 @@ map:release_group_credit a d2rq:PropertyBridge ;
     d2rq:refersToClassMap map:Artist ;
     d2rq:join "musicbrainz.release_group.gid => simplebrainz.release_group_artist.release_group" ;
     d2rq:join "simplebrainz.release_group_artist.artist => musicbrainz.artist.id" .
+
+map:rel_release_group_recording_group a d2rq:PropertyBridge ;
+    d2rq:belongsToClassMap map:ReleaseGroup ;
+    d2rq:property sb:contains;
+    d2rq:refersToClassMap map:RecordingGroup ;
+    d2rq:join "musicbrainz.release_group.gid => simplebrainz.release_group_recording_group.release_group" ;
+    d2rq:join "simplebrainz.release_group_recording_group.recording_group => simplebrainz.recording_group.recording_group" .
 
 
 ########################################
@@ -131,6 +149,13 @@ map:recording_group_credit a d2rq:PropertyBridge ;
     d2rq:refersToClassMap map:Artist ;
     d2rq:join "simplebrainz.recording_group.recording_group => simplebrainz.recording_group_artist.recording_group" ;
     d2rq:join "simplebrainz.recording_group_artist.artist => musicbrainz.artist.id" .
+
+map:rel_recording_group_release_group a d2rq:PropertyBridge ;
+    d2rq:belongsToClassMap map:RecordingGroup ;
+    d2rq:property sb:contained_in;
+    d2rq:refersToClassMap map:ReleaseGroup ;
+    d2rq:join "simplebrainz.recording_group.recording_group=> simplebrainz.release_group_recording_group.recording_group" ;
+    d2rq:join "simplebrainz.release_group_recording_group.release_group => musicbrainz.release_group.gid" .
 
 
 ########################################

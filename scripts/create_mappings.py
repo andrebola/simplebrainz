@@ -30,13 +30,14 @@ def main():
             ("rel_artist_label", "Artist", "Label", "musicbrainz.artist.id", "artist_id", "label_id", "musicbrainz.label.id")
              ]
    
-   
     alias_counter = 0
     output = []
     for table, c1, c2, t1, co1, co2, t2 in tables:
-        cur.execute("select link_label, link_type from simplebrainz.%s group by link_label, link_type ;" % (table))
+        cur.execute("select link_label, link_type, reverse_link from simplebrainz.%s group by link_label, link_type, reverse_link ;" % (table))
         for links in cur.fetchall():
             short_name = links[0].replace(' ', '_').replace('/', '_')
+            reverse_short_name = re.sub('\{.*?\}','', links[2])
+            reverse_short_name = reverse_short_name.replace(' ', '_').replace('/', '_')
             if co1+"2" == co2:
                 same_table_name = ".".join(t2.split('.')[0:-1])
                 same_table_field = t2.split('.')[-1]
@@ -49,6 +50,16 @@ def main():
                     d2rq:join "%s=> simplebrainz.%s.%s" ;
                     d2rq:join "simplebrainz.%s.%s => rg%d.%s" .\n\n""" % (table, short_name, c1, short_name, c2, table, links[1], same_table_name, alias_counter, t1, table, co1, table, co2, alias_counter, same_table_field))
                 alias_counter +=1
+                output.append("""map:inverse_%s_%s a d2rq:PropertyBridge ;
+                    d2rq:belongsToClassMap map:%s ;
+                    d2rq:property sb:%s ;
+                    d2rq:refersToClassMap map:%s ;
+                    d2rq:condition "simplebrainz.%s.link_type =%i " ;
+                    d2rq:alias "%s as rg%d";
+                    d2rq:join "%s=> simplebrainz.%s.%s" ;
+                    d2rq:join simplebrainz."%s.%s => rg%d.%s" .\n\n""" % (table, reverse_short_name, c2, reverse_short_name, c1, table, links[1], same_table_name, alias_counter, t1, table, co2, table, co1, alias_counter, same_table_field))
+                alias_counter +=1
+
             else:
                 output.append("""map:%s_%s a d2rq:PropertyBridge ;
                     d2rq:belongsToClassMap map:%s ;
@@ -57,6 +68,14 @@ def main():
                     d2rq:condition "simplebrainz.%s.link_type =%i " ;
                     d2rq:join "%s=> simplebrainz.%s.%s" ;
                     d2rq:join "simplebrainz.%s.%s => %s" .\n\n""" % (table, short_name, c1, short_name, c2, table, links[1], t1, table, co1, table, co2, t2))
+                output.append("""map:%s_%s a d2rq:PropertyBridge ;
+                    d2rq:belongsToClassMap map:%s ;
+                    d2rq:property sb:%s ;
+                    d2rq:refersToClassMap map:%s ;
+                    d2rq:condition "simplebrainz.%s.link_type =%i " ;
+                    d2rq:join "%s=> simplebrainz.%s.%s" ;
+                    d2rq:join "simplebrainz.%s.%s => %s" .\n\n""" % (table, reverse_short_name, c2, reverse_short_name, c1, table, links[1], t2, table, co2, table, co1, t1))
+
     cur.close()
     conn.close()
     
