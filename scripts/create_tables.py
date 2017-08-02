@@ -27,7 +27,7 @@ recording_data = {}
 work_data = {}
 
 def save_results(conn, cur):
-    global recordings, groups, works, recording_data
+    global recordings, groups, works, recording_data, work_data
     # Save the results in a new table for groups
     
     # create tables
@@ -47,9 +47,9 @@ def save_results(conn, cur):
     extras.execute_values (
         cur, "INSERT INTO simplebrainz.recording_group VALUES %s;", insert_works, template=None, page_size=100
     )
+    insert_recs = []
+    insert_recs_artists = []
     for rec in recordings.keys():
-        insert_recs = []
-        insert_recs_artists = []
         for work in recordings[rec]:
             insert_recs.append((rec, work, works[work]))
             if rec in recording_data:
@@ -156,7 +156,7 @@ def save_results(conn, cur):
     conn.commit()
 
 def main():
-    global recordings, groups, works, recording_data
+    global recordings, groups, works, recording_data, work_data
 
     conn = psycopg2.connect(dbname="musicbrainz", user="postgres", password="")
 
