@@ -71,16 +71,17 @@ map:artist_area a d2rq:PropertyBridge ;
     d2rq:join "musicbrainz.artist.area => musicbrainz.area.id".
 
 map:artist_type_person a d2rq:PropertyBridge ;
-    d2rq:belongsToClassMap map:Artist ;
-    d2rq:property rdf:type ;
-    d2rq:condition "musicbrainz.artist.type = 1" ;
-    d2rq:constantValue mo:SoloMusicArtist .
+	d2rq:belongsToClassMap map:Artist ;
+	d2rq:property rdf:type ;
+	d2rq:condition "musicbrainz.artist.type = 1" ;
+	d2rq:constantValue mo:SoloMusicArtist .
 
 map:artist_type_group a d2rq:PropertyBridge ;
-    d2rq:belongsToClassMap map:Artist ;
-    d2rq:property rdf:type ;
-    d2rq:condition "musicbrainz.artist.type = 2" ;
-    d2rq:constantValue mo:MusicGroup .
+	d2rq:belongsToClassMap map:Artist ;
+	d2rq:property rdf:type ;
+	d2rq:condition "musicbrainz.artist.type = 2" ;
+	d2rq:constantValue mo:MusicGroup .
+
 
 ########################################
 # release_group table (mo:SignalGroup) #
