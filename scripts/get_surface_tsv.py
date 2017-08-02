@@ -66,7 +66,7 @@ def load_types():
         record = cur.fetchmany(cur.itersize)
         if record:
             for alias in record:
-                tsv_surface.write('http://musicbrainz.org/recording_group/' + alias[0] + '\t' + '\t'.join(alias[1]) + '\t' + '\t'.join(alias[2]) + '\n')
+                tsv_surface.write('http://musicbrainz.org/work/' + alias[0] + '\t' + '\t'.join(alias[1]) + '\t' + '\t'.join(alias[2]) + '\n')
                 elements_added[alias[0]] = None
         else:
             more_results = False
@@ -82,7 +82,7 @@ def load_types():
         if record:
             for alias in record:
                 if alias[0] not in elements_added:
-                    tsv_surface.write('http://musicbrainz.org/recording_group/' + alias[0] + '\t' + alias[1] + '\n')
+                    tsv_surface.write('http://musicbrainz.org/work/' + alias[0] + '\t' + alias[1] + '\n')
         else:
             more_results = False
             cur.close()
@@ -96,7 +96,7 @@ def load_types():
         record = cur.fetchmany(cur.itersize)
         if record:
             for alias in record:
-                tsv_surface.write('http://musicbrainz.org/release_group/' + alias[1] + '\t' + '\t'.join(alias[2]) + '\t' + alias[3] + '\n')
+                tsv_surface.write('http://musicbrainz.org/release-group/' + alias[1] + '\t' + '\t'.join(alias[2]) + '\t' + alias[3] + '\n')
                 elements_added[alias[1]] = None
         else:
             more_results = False
@@ -110,7 +110,7 @@ def load_types():
         if record:
             for alias in record:
                 if alias[0] not in elements_added:
-                    tsv_surface.write('http://musicbrainz.org/release_group/' + alias[0] + '\t' + alias[1] + '\n')
+                    tsv_surface.write('http://musicbrainz.org/release-group/' + alias[0] + '\t' + alias[1] + '\n')
         else:
             more_results = False
             cur.close()
