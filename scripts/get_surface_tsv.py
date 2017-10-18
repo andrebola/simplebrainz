@@ -58,6 +58,7 @@ def load_types():
             more_results = False
             cur.close()
 
+    elements_added = {}
     cur = conn.cursor(name='artists')
     cur.itersize = 10000
     cur.execute("select r.recording_group, array_agg(ra.name), array_agg(DISTINCT(re.name)) from musicbrainz.recording_alias ra, simplebrainz.recording_group_recording r, musicbrainz.recording re where r.recording_id=ra.recording AND r.recording_id = re.id group by r.recording_group;")
@@ -74,7 +75,6 @@ def load_types():
 
     cur = conn.cursor(name='artists')
     cur.itersize = 10000
-    elements_added = {}
     cur.execute("select r.recording_group, r.name from simplebrainz.recording_group r ;")
     more_results = True
     while more_results:
